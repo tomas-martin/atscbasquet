@@ -9,22 +9,22 @@
   --navy-card: #0f1e33;
   --navy-card-border: #182d49;
   --navy-card-hover: #152740;
-  
+
   --red-talleres: #d92736;
   --red-hover: #ef2e3e;
   --red-glow: rgba(217, 39, 54, 0.45);
-  
+
   --blue-talleres: #133968;
   --blue-accent: #1e5699;
   --cyan-accent: #00d2b4;
   --orange-basketball: #ff6b35;
   --orange-glow: rgba(255, 107, 53, 0.4);
   --gold-accent: #f59e0b;
-  
+
   --text-white: #ffffff;
   --text-muted: #8496ad;
   --text-dim: #50637c;
-  
+
   --success: #10b981;
   --success-bg: rgba(16, 185, 129, 0.12);
 
@@ -102,10 +102,23 @@ input[type="number"] {
 }
 
 @keyframes shakeShort {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  75% { transform: translateX(-2px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-2px);
+  }
 }
 
 .custom-validation-bubble {
@@ -165,6 +178,7 @@ input[type="number"] {
     opacity: 0;
     transform: translateY(-5px) scale(0.96);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -183,7 +197,8 @@ a {
   text-decoration: none;
 }
 
-button, input {
+button,
+input {
   font-family: inherit;
 }
 
@@ -208,8 +223,15 @@ button {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .spinner {
@@ -217,24 +239,41 @@ button {
 }
 
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes ballBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 @keyframes ballSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 15px rgba(255, 107, 53, 0.12);
     border-color: rgba(255, 107, 53, 0.25);
   }
+
   50% {
     box-shadow: 0 0 30px rgba(217, 39, 54, 0.3);
     border-color: rgba(217, 39, 54, 0.5);
@@ -242,9 +281,17 @@ button {
 }
 
 @keyframes buttonShine {
-  0% { left: -100%; }
-  25% { left: 200%; }
-  100% { left: 200%; }
+  0% {
+    left: -100%;
+  }
+
+  25% {
+    left: 200%;
+  }
+
+  100% {
+    left: 200%;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -323,12 +370,18 @@ button {
   bottom: -4px;
   right: -5px;
   font-size: 13px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
   animation: ballBounce 2.5s ease-in-out infinite;
 }
 
-.brand-shield span { font-size: 16px; }
-.brand-shield small { font-size: 9px; letter-spacing: 1px; }
+.brand-shield span {
+  font-size: 16px;
+}
+
+.brand-shield small {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
 
 .brand-name {
   font-size: 13px;
@@ -471,8 +524,14 @@ button {
   font-size: 32px;
 }
 
-.shield-lg span { font-size: 32px; }
-.shield-lg small { font-size: 16px; letter-spacing: 2px; }
+.shield-lg span {
+  font-size: 32px;
+}
+
+.shield-lg small {
+  font-size: 16px;
+  letter-spacing: 2px;
+}
 
 /* ══════════════════════════════════════════════════════════
    SECCIÓN 1: PRESENTACIÓN DIRECTA DE LA FIESTA
@@ -791,6 +850,117 @@ button {
 .dark-card:hover {
   border-color: rgba(255, 107, 53, 0.3);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(19, 57, 104, 0.3);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SELECTOR DE CENA: BÁSQUET MASCULINO O FEMENINO
+   ══════════════════════════════════════════════════════════ */
+.dinner-branch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.dinner-branch-option {
+  background: rgba(6, 13, 23, 0.6);
+  border: 2px solid var(--navy-card-border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  user-select: none;
+}
+
+.dinner-branch-option:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 107, 53, 0.45);
+  background: rgba(10, 21, 36, 0.95);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.dinner-branch-option.selected {
+  border-color: var(--red-talleres);
+  background: linear-gradient(145deg, rgba(217, 39, 54, 0.12) 0%, rgba(19, 57, 104, 0.25) 100%);
+  box-shadow: 0 8px 30px rgba(217, 39, 54, 0.28), 0 0 20px rgba(255, 107, 53, 0.15);
+}
+
+.dinner-branch-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dinner-branch-icon {
+  font-size: 26px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+}
+
+.dinner-branch-title-wrap {
+  flex: 1;
+}
+
+.dinner-branch-title-wrap h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.dinner-branch-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.tag-masculino {
+  background: rgba(30, 86, 153, 0.3);
+  color: #60a5fa;
+  border: 1px solid rgba(30, 86, 153, 0.5);
+}
+
+.tag-femenino {
+  background: rgba(0, 210, 180, 0.22);
+  color: #00d2b4;
+  border: 1px solid rgba(0, 210, 180, 0.45);
+}
+
+.dinner-radio-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--navy-card-border);
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.dinner-branch-option.selected .dinner-radio-dot {
+  border-color: var(--red-talleres);
+  box-shadow: 0 0 10px var(--red-glow);
+}
+
+.inner-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--red-talleres);
+  animation: bubblePop 0.2s ease-out forwards;
+}
+
+.dinner-branch-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .card-top-header {
@@ -1248,7 +1418,8 @@ button {
   color: var(--text-muted);
 }
 
-.sum-row b, .sum-row span:last-child {
+.sum-row b,
+.sum-row span:last-child {
   color: #fff;
 }
 
@@ -1481,7 +1652,9 @@ button {
   flex-shrink: 0;
 }
 
-.ticket-club-shield small { font-size: 7px; }
+.ticket-club-shield small {
+  font-size: 7px;
+}
 
 .ticket-club-info {
   display: flex;
@@ -1520,7 +1693,8 @@ button {
   align-items: center;
 }
 
-.perf-left, .perf-right {
+.perf-left,
+.perf-right {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -1529,8 +1703,13 @@ button {
   top: 0;
 }
 
-.perf-left { left: -8px; }
-.perf-right { right: -8px; }
+.perf-left {
+  left: -8px;
+}
+
+.perf-right {
+  right: -8px;
+}
 
 .perf-line {
   width: 100%;
@@ -1665,14 +1844,16 @@ button {
   flex-wrap: wrap;
 }
 
-.footer > div, .footer-right > div {
+.footer>div,
+.footer-right>div {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: var(--text-muted);
 }
 
-.footer b, .footer-right b {
+.footer b,
+.footer-right b {
   color: var(--red-talleres);
 }
 
@@ -1700,7 +1881,7 @@ button {
   box-shadow: 0 4px 14px var(--red-glow);
 }
 
-.footer > small {
+.footer>small {
   width: 100%;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding-top: 14px;
@@ -1962,6 +2143,7 @@ button {
   .nav-stepper {
     display: none;
   }
+
   .payment-grid-layout {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -1974,20 +2156,24 @@ button {
     height: 66px;
     padding: 0 16px;
   }
+
   .form-grid-modern {
     grid-template-columns: 1fr;
     gap: 14px;
   }
+
   .form-actions {
     flex-direction: column-reverse;
     gap: 12px;
   }
+
   .form-actions button,
   .form-actions .btn-secondary {
     width: 100%;
     justify-content: center;
     height: 48px;
   }
+
   .footer {
     flex-direction: column;
     align-items: center;
@@ -1995,19 +2181,24 @@ button {
     gap: 18px;
     padding: 30px 16px 36px;
   }
+
   .footer-brand {
     justify-content: center;
   }
+
   .footer-right {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 14px;
   }
-  .footer > div, .footer-right > div {
+
+  .footer>div,
+  .footer-right>div {
     text-align: center;
   }
-  .footer > small {
+
+  .footer>small {
     text-align: center;
   }
 }
@@ -2017,14 +2208,17 @@ button {
   .fiesta-hero {
     padding: 24px 14px 38px;
   }
+
   .fiesta-hero-glow {
     width: 260px;
     height: 180px;
     filter: blur(45px);
   }
+
   .fiesta-title {
     margin-bottom: 20px;
   }
+
   .fiesta-quick-info {
     flex-direction: column;
     align-items: stretch;
@@ -2034,58 +2228,72 @@ button {
     width: 100%;
     max-width: 440px;
   }
+
   .info-divider {
     display: none;
   }
+
   .info-item {
     justify-content: flex-start;
     font-size: 13px;
     gap: 10px;
   }
+
   .btn-huge-red {
     width: 100%;
     max-width: 380px;
     padding: 16px 20px;
     font-size: 14px;
   }
+
   .step-section {
     padding: 20px 14px 60px;
   }
+
   .step-header {
     margin-bottom: 22px;
   }
+
   .dark-card {
     padding: 18px 14px;
     border-radius: 8px;
     margin-bottom: 16px;
   }
+
   .form-field input {
     font-size: 16px !important;
     height: 48px;
   }
+
   .whatsapp-cta-card {
     padding: 20px 14px;
     gap: 16px;
   }
+
   .wa-card-header {
     gap: 12px;
   }
+
   .wa-icon-circle {
     width: 46px;
     height: 46px;
   }
+
   .wa-card-header h3 {
     font-size: 16px;
   }
+
   .wa-card-header p {
     font-size: 12px;
   }
+
   .btn-whatsapp-huge {
     width: 100%;
     padding: 16px 14px;
     font-size: 13.5px;
     text-align: center;
   }
+
   .tickets-grid {
     grid-template-columns: 1fr;
     gap: 18px;
@@ -2101,30 +2309,37 @@ button {
     text-align: center;
     padding: 16px 14px;
   }
+
   .counter-info {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .stepper-modern {
     margin: 0 auto;
   }
+
   .ticket-total-calc {
     padding-top: 6px;
   }
+
   .attendee-row {
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
   }
+
   .att-num {
     width: auto;
     font-size: 11px;
   }
+
   .attendee-row input {
     font-size: 16px !important;
     height: 44px;
   }
+
   .alias-highlight-box {
     flex-direction: column;
     align-items: stretch;
@@ -2132,34 +2347,41 @@ button {
     gap: 14px;
     padding: 16px 14px;
   }
+
   .alias-info-col {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .alias-code {
     font-size: clamp(17px, 5.2vw, 22px);
     word-break: break-all;
     text-align: center;
   }
+
   .btn-copy-alias {
     width: 100%;
     justify-content: center;
     height: 46px;
   }
+
   .cbu-row {
     flex-wrap: wrap;
     gap: 6px;
     font-size: 11.5px;
   }
+
   .copy-row {
     flex-wrap: wrap;
     gap: 6px;
   }
+
   .cbu-row code {
     word-break: break-all;
     font-size: 11px;
   }
+
   .sum-row {
     font-size: 12px;
   }
@@ -2171,34 +2393,42 @@ button {
     padding: 0 10px;
     height: 60px;
   }
+
   .brand {
     gap: 8px;
   }
+
   .brand-name {
     font-size: 10.5px;
     letter-spacing: 0.8px;
   }
+
   .brand-name span {
     font-size: 7px;
     letter-spacing: 1.2px;
   }
+
   .nav-cta {
     padding: 7px 10px;
     font-size: 9.5px;
     gap: 4px;
   }
+
   .card-top-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
+
   .card-right-badge {
     margin-left: 0;
   }
+
   .btn-huge-red {
     font-size: 12.5px;
     padding: 15px 14px;
   }
+
   .footer-admin-btn {
     width: 100%;
     justify-content: center;
@@ -2742,5 +2972,3 @@ button {
   font-weight: bold;
   margin-top: 4px;
 }
-
-

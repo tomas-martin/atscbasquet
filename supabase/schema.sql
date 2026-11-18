@@ -38,6 +38,7 @@ create table public.orders (
   provider_preference_id text,
   provider_payment_id text,
   transfer_reference text,
+  dinner_branch text not null default 'masculino', -- 'masculino' | 'femenino'
   created_at timestamptz not null default now(),
   paid_at timestamptz,
   constraint orders_provider_payment_unique unique (provider_payment_id)
@@ -48,6 +49,7 @@ create table public.tickets (
   ticket_number serial, -- Número correlativo para sorteo (1, 2, 3...)
   order_id uuid not null references public.orders(id) on delete restrict,
   attendee_name text,
+  dinner_branch text not null default 'masculino',
   qr_token uuid not null unique default gen_random_uuid(),
   status text not null default 'valid' check (status in ('valid', 'used', 'cancelled')),
   checked_in_at timestamptz,

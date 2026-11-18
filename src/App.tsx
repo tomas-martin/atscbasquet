@@ -18,6 +18,8 @@ import {
   type IssuedTicket,
   type OrderConfirmation,
   type Category,
+  type DinnerBranch,
+  DINNER_BRANCH_CONFIG,
   CATEGORIES
 } from './types'
 
@@ -131,6 +133,9 @@ function App() {
     (import.meta.env.VITE_CLUB_LOGO_URL as string) || null
   )
   const [unitPrice, setUnitPrice] = useState<number>(DEFAULT_PRICE_ARS)
+
+  // ── Selección de Cena / Rama: Masculino o Femenino ──
+  const [dinnerBranch, setDinnerBranch] = useState<DinnerBranch>('masculino')
 
   // ── Selección clara y estructurada de entradas del grupo ──
   interface PlayerAttendeeItem {
@@ -352,7 +357,8 @@ function App() {
 
       // 1. Guardar pedido en Supabase
       if (supabase) {
-        const { data: orderData, error: orderErr } = await supabase.from('orders').insert({
+        const branchLabel = DINNER_BRANCH_CONFIG[dinnerBranch]?.title || 'Cena Básquet'
+        const orderInsertPayload: any = {
           buyer_full_name: buyer.fullName,
           buyer_dni: buyer.dni,
           buyer_email: buyer.email,
@@ -362,16 +368,38 @@ function App() {
           total_ars: total,
           payment_method: 'transferencia',
           status: isZeroCostOrder ? 'pagado' : 'pendiente',
-          transfer_reference: isZeroCostOrder ? 'Entrada Jugador Bonificada ($0)' : null,
+          transfer_reference: isZeroCostOrder
+            ? `Entrada Bonificada ($0) · ${branchLabel}`
+            : branchLabel,
+          dinner_branch: dinnerBranch,
           paid_at: isZeroCostOrder ? new Date().toISOString() : null,
-        }).select('id').single()
-
-        if (orderErr) {
-          console.error('Error al insertar orden en Supabase:', orderErr)
-          throw new Error(`Error en la base de datos (${orderErr.code}): ${orderErr.message}`)
         }
 
-        if (orderData?.id) {
+        const { data: orderData, error: orderErr } = await supabase
+          .from('orders')
+          .insert(orderInsertPayload)
+          .select('id')
+          .single()
+
+        if (orderErr) {
+          // Si la columna dinner_branch aún no existe en Supabase, reintentar sin ella
+          if (orderErr.code === '42703' || orderErr.message?.includes('dinner_branch')) {
+            const { dinner_branch, ...fallbackPayload } = orderInsertPayload
+            const { data: retryData, error: retryErr } = await supabase
+              .from('orders')
+              .insert(fallbackPayload)
+              .select('id')
+              .single()
+            if (retryErr) {
+              console.error('Error al insertar orden:', retryErr)
+              throw new Error(`Error en la base de datos (${retryErr.code}): ${retryErr.message}`)
+            }
+            if (retryData?.id) savedOrderId = retryData.id
+          } else {
+            console.error('Error al insertar orden en Supabase:', orderErr)
+            throw new Error(`Error en la base de datos (${orderErr.code}): ${orderErr.message}`)
+          }
+        } else if (orderData?.id) {
           savedOrderId = orderData.id
         }
       }
@@ -435,9 +463,10 @@ function App() {
           eventName: EVENT_NAME,
           date: EVENT_DATE,
           venue: EVENT_VENUE,
+          dinnerBranch,
           isPlayer: true,
           role: 'jugador',
-          category: (p.category || 'Escuelita') as Category,
+          category: (p.category || 'Mosquitos') as Category,
         })
       }
 
@@ -469,9 +498,10 @@ function App() {
           eventName: EVENT_NAME,
           date: EVENT_DATE,
           venue: EVENT_VENUE,
+          dinnerBranch,
           isPlayer: false,
           role: 'acompanante',
-          category: (primaryCategory || 'Escuelita') as Category,
+          category: (primaryCategory || 'Mosquitos') as Category,
         })
       }
 
@@ -492,9 +522,10 @@ function App() {
           eventName: EVENT_NAME,
           date: EVENT_DATE,
           venue: EVENT_VENUE,
+          dinnerBranch,
           isPlayer: true,
           role: 'menor',
-          category: (primaryCategory || 'Escuelita') as Category,
+          category: (primaryCategory || 'Mosquitos') as Category,
         })
       }
 
@@ -504,6 +535,7 @@ function App() {
           order_id: savedOrderId,
           attendee_name: t.attendeeName,
           qr_token: t.qrToken,
+          dinner_branch: dinnerBranch,
           status: 'valid',
           ticket_number: (t.isPlayer || t.role === 'menor' || t.role === 'jugador') ? null : parseInt(t.ticketNumber, 10),
         }))
@@ -516,9 +548,9 @@ function App() {
               ticket_number: r.ticket_number ?? 0
             }))
             await supabase.from('tickets').insert(retryRows)
-          } else if (ticketErr.code === '42703') {
-            // Si la columna no existe aún en la base de datos
-            const fallbackRows = ticketRows.map(({ ticket_number, ...rest }) => rest)
+          } else if (ticketErr.code === '42703' || ticketErr.message?.includes('dinner_branch')) {
+            // Si alguna columna no existe aún en la base de datos
+            const fallbackRows = ticketRows.map(({ ticket_number, dinner_branch, ...rest }: any) => rest)
             await supabase.from('tickets').insert(fallbackRows)
           } else {
             console.error('Error insertando tickets:', ticketErr)
@@ -529,11 +561,12 @@ function App() {
       // Estructura completa del comprador con los nombres de asistentes para emails y comprobantes
       const buyerWithDetails: BuyerDetails = {
         ...buyer,
+        dinnerBranch,
         attendees: tickets.map(t => t.attendeeName),
         attendeeDetails: tickets.map(t => ({
           name: t.attendeeName,
           role: t.role || (t.isPlayer ? 'jugador' : 'acompanante'),
-          category: (t.category || primaryCategory || 'Escuelita') as Category
+          category: (t.category || primaryCategory || 'Mosquitos') as Category
         }))
       }
 
@@ -579,6 +612,7 @@ function App() {
       const conf: OrderConfirmation = {
         orderId: displayOrderId,
         buyer: buyerWithDetails,
+        dinnerBranch,
         quantity: tickets.length,
         totalArs: total,
         paymentMethod: 'transferencia',
@@ -602,7 +636,8 @@ function App() {
   // Generar URL de WhatsApp con mensaje prearmado
   const getWhatsAppUrl = () => {
     if (!orderConfirmation) return '#'
-    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet (Viernes 18/12 en Estadio Salvador Bonanno - Andes Talleres).\n\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
+    const branchLabel = orderConfirmation.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'
+    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet (${branchLabel} - Viernes 18/12 en Estadio Salvador Bonanno).\n\n*Cena:* ${branchLabel}\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
     return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`
   }
 
@@ -735,12 +770,72 @@ function App() {
             </div>
 
             <div className="form-container">
-              {/* 1. SELECCIÓN DE ENTRADAS DEL GRUPO */}
+              {/* 1. SELECCIÓN DE CENA (RAMA MASCULINA O FEMENINA) */}
+              <div className="dark-card dinner-branch-card">
+                <div className="card-top-header">
+                  <div className="card-icon-round" style={{ background: 'rgba(255, 107, 53, 0.15)', color: '#ff6b35' }}>
+                    🏀
+                  </div>
+                  <div>
+                    <h3>1. ¿A qué cena vas a asistir?</h3>
+                    <p>Seleccioná si vas a participar de la cena del básquet masculino o femenino</p>
+                  </div>
+                  <span className="card-right-badge" style={{ color: '#ff9d66', border: '1px solid rgba(255,107,53,0.3)' }}>
+                    Cena Oficial
+                  </span>
+                </div>
+
+                <div className="dinner-branch-grid">
+                  <div
+                    className={`dinner-branch-option ${dinnerBranch === 'masculino' ? 'selected' : ''}`}
+                    onClick={() => setDinnerBranch('masculino')}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className="dinner-branch-top">
+                      <span className="dinner-branch-icon">🏀</span>
+                      <div className="dinner-branch-title-wrap">
+                        <h4>Cena Básquet Masculino</h4>
+                        <span className="dinner-branch-tag tag-masculino">RAMA MASCULINA</span>
+                      </div>
+                      <div className="dinner-radio-dot">
+                        {dinnerBranch === 'masculino' && <div className="inner-dot" />}
+                      </div>
+                    </div>
+                    <p className="dinner-branch-desc">
+                      Categorías formativas (Mosquitos a U21), Primera División Masculina y Maxibásquet.
+                    </p>
+                  </div>
+
+                  <div
+                    className={`dinner-branch-option ${dinnerBranch === 'femenino' ? 'selected' : ''}`}
+                    onClick={() => setDinnerBranch('femenino')}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className="dinner-branch-top">
+                      <span className="dinner-branch-icon">🏀</span>
+                      <div className="dinner-branch-title-wrap">
+                        <h4>Cena Básquet Femenino</h4>
+                        <span className="dinner-branch-tag tag-femenino">RAMA FEMENINA</span>
+                      </div>
+                      <div className="dinner-radio-dot">
+                        {dinnerBranch === 'femenino' && <div className="inner-dot" />}
+                      </div>
+                    </div>
+                    <p className="dinner-branch-desc">
+                      Categorías formativas femeninas y Primera División Femenina.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. SELECCIÓN DE ENTRADAS DEL GRUPO */}
               <div className="dark-card">
                 <div className="card-top-header">
                   <div className="card-icon-round"><Users size={20} /></div>
                   <div>
-                    <h3>1. Entradas del Grupo (¿Quiénes van a la fiesta?)</h3>
+                    <h3>2. Entradas del Grupo (¿Quiénes van a la fiesta?)</h3>
                     <p>Podés sumar a jugadores y profesores del club, acompañantes mayores y niños menores de 3 años</p>
                   </div>
                 </div>
@@ -1312,6 +1407,10 @@ function App() {
                 </div>
 
                 <div className="ticket-pricing-summary" style={{ marginTop: '0' }}>
+                  <div className="summary-breakdown-row" style={{ fontSize: '13px', color: '#ff9d66', paddingBottom: '8px', borderBottom: '1px dashed rgba(255,255,255,0.12)' }}>
+                    <span>Cena seleccionada:</span>
+                    <strong>{DINNER_BRANCH_CONFIG[dinnerBranch]?.title || 'Cena Básquet'}</strong>
+                  </div>
                   {players.length > 0 && (
                     <div className="summary-breakdown-row">
                       <span>🏀 Entradas Jugadores/as y Profes ({players.length}):</span>
@@ -1484,7 +1583,13 @@ function App() {
                   <div className="summary-rows">
                     <div className="sum-row">
                       <span>Evento:</span>
-                      <b>Cena Fin de Año 2026</b>
+                      <b>Cierre Básquet 2026</b>
+                    </div>
+                    <div className="sum-row">
+                      <span>Cena seleccionada:</span>
+                      <b style={{ color: dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa' }}>
+                        {DINNER_BRANCH_CONFIG[dinnerBranch]?.title}
+                      </b>
                     </div>
                     <div className="sum-row">
                       <span>Titular:</span>
@@ -1668,10 +1773,12 @@ function App() {
                       ) : (
                         <span className="badge-raffle-pill">🎟️ SORTEO N° {t.ticketNumber}</span>
                       )}
-                      <span className="conf-club-tag">ATSC 2026</span>
+                      <span className="conf-club-tag" style={{ background: t.dinnerBranch === 'femenino' ? 'rgba(0, 210, 180, 0.2)' : 'rgba(30, 86, 153, 0.25)', color: t.dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa', borderColor: t.dinnerBranch === 'femenino' ? 'rgba(0, 210, 180, 0.4)' : 'rgba(30, 86, 153, 0.4)' }}>
+                        {t.dinnerBranch === 'femenino' ? '🏀 FEMENINO' : '🏀 MASCULINO'}
+                      </span>
                     </div>
                     <div className="conf-ticket-name">{t.attendeeName}</div>
-                    <small className="conf-ticket-event">Cena de Fin de Año 2026 · Estadio Salvador Bonanno - Andes Talleres (18/12)</small>
+                    <small className="conf-ticket-event">{t.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'} · Estadio Salvador Bonanno (18/12)</small>
 
                     {confirmationQrUrls[t.qrToken] && (
                       <div className="conf-qr-display">

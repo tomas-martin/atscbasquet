@@ -5,6 +5,23 @@ export type OrderStatus = 'pendiente' | 'pagado' | 'rechazado' | 'cancelado'
 
 export type AttendeeRole = 'jugador' | 'acompanante' | 'menor'
 
+export type DinnerBranch = 'masculino' | 'femenino'
+
+export const DINNER_BRANCH_CONFIG: Record<DinnerBranch, { title: string; subtitle: string; tag: string; badgeColor: string }> = {
+  masculino: {
+    title: 'Cena Básquet Masculino',
+    subtitle: 'Mosquitos a U21 masculinos, Primera y Maxibásquet',
+    tag: 'Rama Masculina',
+    badgeColor: '#1e5699'
+  },
+  femenino: {
+    title: 'Cena Básquet Femenino',
+    subtitle: 'Formativa Femenina y Primera División Femenina',
+    tag: 'Rama Femenina',
+    badgeColor: '#00d2b4'
+  }
+}
+
 export const CATEGORIES = [
   'Mosquitos',
   'Pre-Mini',
@@ -34,6 +51,7 @@ export interface BuyerDetails {
   dni: string
   email: string
   phone: string
+  dinnerBranch?: DinnerBranch
   attendees?: string[]
   attendeeDetails?: AttendeeDetail[]
 }
@@ -52,6 +70,7 @@ export interface IssuedTicket {
   eventName: string
   date: string
   venue: string
+  dinnerBranch?: DinnerBranch
   isPlayer?: boolean
   role?: AttendeeRole
   category?: Category
@@ -60,6 +79,7 @@ export interface IssuedTicket {
 export interface OrderConfirmation {
   orderId: string
   buyer: BuyerDetails
+  dinnerBranch?: DinnerBranch
   quantity: number
   totalArs: number
   paymentMethod: PaymentMethod

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useRef, useMemo } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
 import QRCode from 'qrcode'
 import confetti from 'canvas-confetti'
@@ -31,6 +31,7 @@ interface OrderRow {
   payment_method: string
   status: string
   transfer_reference?: string
+  dinner_branch?: string
   created_at: string
 }
 
@@ -40,6 +41,7 @@ interface TicketRow {
   attendee_name: string
   qr_token: string
   status: string // 'valid' | 'used' | 'cancelled'
+  dinner_branch?: string
   checked_in_at?: string
   created_at: string
   ticket_number?: number | null
@@ -50,6 +52,7 @@ interface ScanResult {
   message: string
   attendeeName?: string
   ticketNumber?: string
+  dinnerBranch?: string
   checkedInAt?: string
   buyerName?: string
 }
@@ -123,6 +126,8 @@ export default function AdminPage({
   const [tickets, setTickets] = useState<TicketRow[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [filterDinner, setFilterDinner] = useState<'all' | 'masculino' | 'femenino'>('all')
+  const [raffleDinnerFilter, setRaffleDinnerFilter] = useState<'all' | 'masculino' | 'femenino'>('all')
   const [approvingOrderId, setApprovingOrderId] = useState<string | null>(null)
   const [actionFeedback, setActionFeedback] = useState<{ message: string; success: boolean } | null>(null)
 
@@ -673,14 +678,21 @@ export default function AdminPage({
         } else if (raffleCategoryFilter === 'Sin Categoría') {
           if (p.isPhysical || p.category !== 'Sin Categoría') return false
         } else {
-          // Categoría deportiva específica (ej: Escuelita, C11, C13, Primera, etc.)
+          // Categoría deportiva específica (ej: Mosquitos, U15, Primera, etc.)
           if (p.isPhysical || p.category !== raffleCategoryFilter) return false
         }
       }
 
+      // 5. Filtro por Rama / Cena (Masculino vs Femenino)
+      if (raffleDinnerFilter !== 'all') {
+        const branch = p.ticket.dinner_branch || p.order?.dinner_branch || (p.order?.transfer_reference?.toLowerCase().includes('femenin') ? 'femenino' : 'masculino')
+        if (raffleDinnerFilter === 'femenino' && branch !== 'femenino') return false
+        if (raffleDinnerFilter === 'masculino' && branch === 'femenino') return false
+      }
+
       return true
     })
-  }, [raffleParticipants, raffleFilter, excludePreviousWinners, winnersHistory, raffleRoleFilter, raffleCategoryFilter])
+  }, [raffleParticipants, raffleFilter, excludePreviousWinners, winnersHistory, raffleRoleFilter, raffleCategoryFilter, raffleDinnerFilter])
 
   // Audio Web API para efectos de sonido
   function playTickSound() {
@@ -1251,6 +1263,9 @@ export default function AdminPage({
         ? 'JUGADOR (Sin sorteo)'
         : (getTicketDisplayNumber(matchedTicket) ? `N° ${getTicketDisplayNumber(matchedTicket)}` : undefined)
 
+      const parentOrder = orderMap.get(matchedTicket.order_id)
+      const ticketDinner = matchedTicket.dinner_branch || parentOrder?.dinner_branch || (parentOrder?.transfer_reference?.toLowerCase().includes('femenin') ? 'femenino' : 'masculino')
+
       // Si ya fue utilizado
       if (matchedTicket.status === 'used') {
         const hora = matchedTicket.checked_in_at
@@ -1262,6 +1277,7 @@ export default function AdminPage({
           message: `¡ATENCIÓN! Esta entrada ya ingresó al evento a las ${hora} hs.`,
           attendeeName: matchedTicket.attendee_name,
           ticketNumber: displayTicketNum,
+          dinnerBranch: ticketDinner,
           checkedInAt: hora,
         })
         playBeep(false)
@@ -1292,6 +1308,7 @@ export default function AdminPage({
         message: '¡ACCESO PERMITIDO! Entrada verificada con éxito.',
         attendeeName: matchedTicket.attendee_name,
         ticketNumber: displayTicketNum,
+        dinnerBranch: ticketDinner,
       })
       playBeep(true)
     } finally {
@@ -1762,6 +1779,11 @@ export default function AdminPage({
     if (!matchesSearch) return false
     if (filterStatus === 'pagado') return o.status === 'pagado'
     if (filterStatus === 'pendiente') return o.status === 'pendiente'
+    if (filterDinner !== 'all') {
+      const isFem = o.dinner_branch === 'femenino' || o.transfer_reference?.toLowerCase().includes('femenin')
+      if (filterDinner === 'femenino' && !isFem) return false
+      if (filterDinner === 'masculino' && isFem) return false
+    }
     return true
   })
 
@@ -1994,6 +2016,24 @@ export default function AdminPage({
                       {scanResult.status === 'invalid' && '❌ CÓDIGO NO VÁLIDO'}
                     </span>
                     <h3>{scanResult.attendeeName || 'Asistente'}</h3>
+                    {scanResult.dinnerBranch && (
+                      <div style={{ margin: '6px 0 10px' }}>
+                        <span style={{
+                          background: scanResult.dinnerBranch === 'femenino' ? 'rgba(0, 210, 180, 0.22)' : 'rgba(30, 86, 153, 0.35)',
+                          color: scanResult.dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa',
+                          border: `1px solid ${scanResult.dinnerBranch === 'femenino' ? 'rgba(0, 210, 180, 0.5)' : 'rgba(30, 86, 153, 0.5)'}`,
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          padding: '3px 10px',
+                          borderRadius: '6px',
+                          letterSpacing: '0.8px',
+                          textTransform: 'uppercase',
+                          display: 'inline-block'
+                        }}>
+                          🏀 {scanResult.dinnerBranch === 'femenino' ? 'CENA BÁSQUET FEMENINO' : 'CENA BÁSQUET MASCULINO'}
+                        </span>
+                      </div>
+                    )}
                     <p>{scanResult.message}</p>
                     {scanResult.ticketNumber && (
                       <div className="result-ticket-badge">
@@ -2565,6 +2605,30 @@ export default function AdminPage({
               >
                 Pendientes
               </button>
+
+              <div style={{ display: 'inline-flex', gap: '6px', marginLeft: '12px', borderLeft: '1px solid rgba(255,255,255,0.12)', paddingLeft: '12px' }}>
+                <button
+                  className={filterDinner === 'all' ? 'active' : ''}
+                  onClick={() => setFilterDinner('all')}
+                  style={{ fontSize: '11.5px', padding: '4px 10px' }}
+                >
+                  Todas las Cenas
+                </button>
+                <button
+                  className={filterDinner === 'masculino' ? 'active' : ''}
+                  onClick={() => setFilterDinner('masculino')}
+                  style={{ fontSize: '11.5px', padding: '4px 10px', color: filterDinner === 'masculino' ? '#fff' : '#60a5fa' }}
+                >
+                  🏀 Masculino
+                </button>
+                <button
+                  className={filterDinner === 'femenino' ? 'active' : ''}
+                  onClick={() => setFilterDinner('femenino')}
+                  style={{ fontSize: '11.5px', padding: '4px 10px', color: filterDinner === 'femenino' ? '#fff' : '#00d2b4' }}
+                >
+                  🏀 Femenino
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2581,6 +2645,7 @@ export default function AdminPage({
               <thead>
                 <tr>
                   <th>N° Pedido</th>
+                  <th>Cena</th>
                   <th>Fecha</th>
                   <th>Comprador</th>
                   <th>DNI</th>
@@ -2599,6 +2664,17 @@ export default function AdminPage({
                       <span className="order-num-pill">
                         #ATSC-{order.id.slice(0, 6).toUpperCase()}
                       </span>
+                    </td>
+                    <td>
+                      {(order.dinner_branch === 'femenino' || order.transfer_reference?.toLowerCase().includes('femenin')) ? (
+                        <span style={{ background: 'rgba(0, 210, 180, 0.15)', color: '#00d2b4', border: '1px solid rgba(0, 210, 180, 0.35)', fontSize: '10.5px', fontWeight: 800, padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                          🏀 Femenino
+                        </span>
+                      ) : (
+                        <span style={{ background: 'rgba(30, 86, 153, 0.25)', color: '#60a5fa', border: '1px solid rgba(30, 86, 153, 0.4)', fontSize: '10.5px', fontWeight: 800, padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                          🏀 Masculino
+                        </span>
+                      )}
                     </td>
                     <td>{new Date(order.created_at).toLocaleDateString('es-AR')}</td>
                     <td><strong>{order.buyer_full_name}</strong></td>
@@ -2786,6 +2862,41 @@ export default function AdminPage({
                           ? raffleCategoryStats.all.total
                           : (raffleCategoryStats[raffleCategoryFilter]?.total || 0)}
                       </span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Selector de Cena / Rama a Sortear */}
+                <div className="sorteo-filter-group">
+                  <label className="sorteo-group-label">
+                    🏀 Cena a Sortear:
+                  </label>
+                  <div className="sorteo-role-pills">
+                    <button
+                      type="button"
+                      className={`sorteo-role-pill ${raffleDinnerFilter === 'all' ? 'active' : ''}`}
+                      onClick={() => setRaffleDinnerFilter('all')}
+                      disabled={isRolling}
+                    >
+                      Todas las Cenas
+                    </button>
+                    <button
+                      type="button"
+                      className={`sorteo-role-pill ${raffleDinnerFilter === 'masculino' ? 'active' : ''}`}
+                      onClick={() => setRaffleDinnerFilter('masculino')}
+                      disabled={isRolling}
+                      style={{ color: raffleDinnerFilter === 'masculino' ? '#fff' : '#60a5fa' }}
+                    >
+                      🏀 Masculino
+                    </button>
+                    <button
+                      type="button"
+                      className={`sorteo-role-pill ${raffleDinnerFilter === 'femenino' ? 'active' : ''}`}
+                      onClick={() => setRaffleDinnerFilter('femenino')}
+                      disabled={isRolling}
+                      style={{ color: raffleDinnerFilter === 'femenino' ? '#fff' : '#00d2b4' }}
+                    >
+                      🏀 Femenino
                     </button>
                   </div>
                 </div>

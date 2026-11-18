@@ -84,8 +84,11 @@ export async function sendTicketsEmail(
             <p style="color: #8a9ab5; margin: 6px 0 0; font-size: 13px;">Gran Fiesta y Cierre de Año 2026 · Andes Talleres Básquet</p>
           </div>
           <h2 style="color: #ffffff; font-size: 19px; border-bottom: 1px solid #1a2d47; padding-bottom: 12px; margin-top: 0;">¡Hola, ${confirmation.buyer.fullName}!</h2>
+          <div style="background: rgba(30, 86, 153, 0.2); border: 1px solid #1e5699; border-radius: 8px; padding: 12px 16px; margin: 16px 0;">
+            <span style="font-size: 14px; color: #ffffff;">🏀 <b>Cena Seleccionada:</b> <span style="color: ${confirmation.dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa'}; font-weight: 700;">${confirmation.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'}</span></span>
+          </div>
           <p style="color: #c2cad7; line-height: 1.6; font-size: 14px;">
-            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet el <b>Viernes 18 de Diciembre (18/12 · 21:00 hs)</b> en el <b>Estadio Salvador Bonanno - Andes Talleres</b>.
+            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet (${confirmation.dinnerBranch === 'femenino' ? 'Rama Femenina' : 'Rama Masculina'}) el <b>Viernes 18 de Diciembre (18/12 · 21:00 hs)</b> en el <b>Estadio Salvador Bonanno - Andes Talleres</b>.
             Presentá los siguientes códigos QR en el ingreso del evento desde tu teléfono celular o impresos.
           </p>
           ${ticketsHtml}
@@ -112,7 +115,7 @@ export async function sendTicketsEmail(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: confirmation.buyer.email,
-        subject: `Tus Entradas QR - Fiesta y Cierre ATSC Básquet 2026 (#${confirmation.orderId.slice(0, 8)})`,
+        subject: `Tus Entradas QR - ${confirmation.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'} ATSC (#${confirmation.orderId.slice(0, 8)})`,
         html: htmlContent,
         attachments,
       }),
