@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.local
+.env.*.local
+.DS_Store
+.vercel
+.supabase
+MANUAL_VENTAS_CONFIDENCIAL.md
+MANUAL_DE_USUARIO.md
+MANUAL_DE_USUARIO_PRIVADO.md
+*.privado.md
+*.confidencial.md
+manual_ventas*
