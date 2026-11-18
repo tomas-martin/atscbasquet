@@ -33,10 +33,15 @@ const CLUB_BANCO = (import.meta.env.VITE_CLUB_BANCO as string) || 'Banco / Bille
 const CLUB_CBU = (import.meta.env.VITE_CLUB_CBU as string) || ''
 const WHATSAPP_PHONE = (import.meta.env.VITE_WHATSAPP_PHONE as string) || '5492615751033'
 
-// Datos oficiales del evento
+// Datos oficiales del evento y fechas independientes por rama
 const EVENT_NAME = 'Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet'
-const EVENT_DATE = 'Viernes 18 de Diciembre de 2026 (18/12) · 21:00 hs'
 const EVENT_VENUE = 'Estadio Salvador Bonanno - Andes Talleres Sport Club'
+
+const EVENT_DATE_MASCULINO = (import.meta.env.VITE_EVENT_DATE_MASCULINO as string) || DINNER_BRANCH_CONFIG.masculino.defaultDate
+const EVENT_DATE_FEMENINO = (import.meta.env.VITE_EVENT_DATE_FEMENINO as string) || DINNER_BRANCH_CONFIG.femenino.defaultDate
+
+const getEventDateForBranch = (branch: DinnerBranch) =>
+  branch === 'femenino' ? EVENT_DATE_FEMENINO : EVENT_DATE_MASCULINO
 
 const money = (amount: number) =>
   new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(amount)
@@ -461,7 +466,7 @@ function App() {
           qrToken: makeUuid(),
           orderId: displayOrderId,
           eventName: EVENT_NAME,
-          date: EVENT_DATE,
+          date: getEventDateForBranch(dinnerBranch),
           venue: EVENT_VENUE,
           dinnerBranch,
           isPlayer: true,
@@ -496,7 +501,7 @@ function App() {
           qrToken: makeUuid(),
           orderId: displayOrderId,
           eventName: EVENT_NAME,
-          date: EVENT_DATE,
+          date: getEventDateForBranch(dinnerBranch),
           venue: EVENT_VENUE,
           dinnerBranch,
           isPlayer: false,
@@ -520,7 +525,7 @@ function App() {
           qrToken: makeUuid(),
           orderId: displayOrderId,
           eventName: EVENT_NAME,
-          date: EVENT_DATE,
+          date: getEventDateForBranch(dinnerBranch),
           venue: EVENT_VENUE,
           dinnerBranch,
           isPlayer: true,
@@ -636,8 +641,10 @@ function App() {
   // Generar URL de WhatsApp con mensaje prearmado
   const getWhatsAppUrl = () => {
     if (!orderConfirmation) return '#'
-    const branchLabel = orderConfirmation.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'
-    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet (${branchLabel} - Viernes 18/12 en Estadio Salvador Bonanno).\n\n*Cena:* ${branchLabel}\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
+    const branch = orderConfirmation.dinnerBranch || 'masculino'
+    const branchLabel = branch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'
+    const branchDate = getEventDateForBranch(branch)
+    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet (${branchLabel} - ${branchDate} en Estadio Salvador Bonanno).\n\n*Cena:* ${branchLabel}\n*Fecha:* ${branchDate}\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
     return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`
   }
 
@@ -721,35 +728,125 @@ function App() {
                 Premiación, reconocimientos, cena comunitaria y gran sorteo de fin de año
               </p>
 
-              <div className="fiesta-quick-info">
-                <div className="info-item">
-                  <Calendar size={18} />
-                  <span>Viernes 18 de Diciembre (18/12) · 21:00 hs</span>
+              {/* ══════════════════════════════════════════════════════════════
+                  SELECTOR DE CENAS DIRECTO EN EL INICIO (POR FECHAS DISTINTAS)
+                 ══════════════════════════════════════════════════════════════ */}
+              <div className="home-events-section">
+                <div className="home-events-badge">
+                  <Sparkles size={16} /> SELECCIONÁ TU CENA SEGÚN LA FECHA
                 </div>
-                <div className="info-divider" />
-                <div className="info-item">
-                  <MapPin size={18} />
-                  <span>Estadio Salvador Bonanno - Andes Talleres</span>
-                </div>
-                <div className="info-divider" />
-                <div className="info-item">
-                  <Ticket size={18} />
-                  <span>Entrada: <b>{money(unitPrice)}</b> por persona</span>
-                </div>
-              </div>
+                <h2 className="home-events-heading">¿A qué cena querés asistir?</h2>
+                <p className="home-events-sub">
+                  El básquet de Andes Talleres cuenta con dos fechas oficiales de cierre. Elegí tu rama para reservar tus entradas:
+                </p>
 
-              <div className="fiesta-cta-wrap">
-                <button
-                  className="btn-huge-red"
-                  onClick={() => {
-                    setCurrentStep('entradas')
-                    scrollToTop()
-                  }}
-                >
-                  <Ticket size={22} />
-                  <span>COMPRAR ENTRADAS</span>
-                  <ArrowRight size={20} />
-                </button>
+                <div className="home-dinner-cards-grid">
+                  {/* Tarjeta 1: Cena Básquet Masculino */}
+                  <div
+                    className={`home-dinner-card card-masculino ${dinnerBranch === 'masculino' ? 'active-dinner' : ''}`}
+                    onClick={() => setDinnerBranch('masculino')}
+                  >
+                    <div className="home-dinner-top-tag tag-masculino">
+                      RAMA MASCULINA
+                    </div>
+                    <div className="home-card-icon">🏀</div>
+                    <h3 className="home-card-title">Cena Básquet Masculino</h3>
+
+                    <div className="home-card-details">
+                      <div className="detail-item detail-date-highlight">
+                        <Calendar size={18} />
+                        <div>
+                          <small>FECHA DEL EVENTO</small>
+                          <strong>{EVENT_DATE_MASCULINO}</strong>
+                        </div>
+                      </div>
+                      <div className="detail-item">
+                        <MapPin size={16} />
+                        <span>Estadio Salvador Bonanno - Andes Talleres</span>
+                      </div>
+                      <div className="detail-item">
+                        <Users size={16} />
+                        <span>Mosquitos a U21, Primera División Masculina y Maxibásquet</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="btn-dinner-cta btn-cta-masculino"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setDinnerBranch('masculino')
+                        setCurrentStep('entradas')
+                        scrollToTop()
+                      }}
+                    >
+                      <span>COMPRAR ENTRADAS MASCULINO</span>
+                      <ArrowRight size={18} />
+                    </button>
+                  </div>
+
+                  {/* Tarjeta 2: Cena Básquet Femenino */}
+                  <div
+                    className={`home-dinner-card card-femenino ${dinnerBranch === 'femenino' ? 'active-dinner' : ''}`}
+                    onClick={() => setDinnerBranch('femenino')}
+                  >
+                    <div className="home-dinner-top-tag tag-femenino">
+                      RAMA FEMENINA
+                    </div>
+                    <div className="home-card-icon">🏀</div>
+                    <h3 className="home-card-title">Cena Básquet Femenino</h3>
+
+                    <div className="home-card-details">
+                      <div className="detail-item detail-date-highlight detail-fem">
+                        <Calendar size={18} />
+                        <div>
+                          <small>FECHA DEL EVENTO</small>
+                          <strong>{EVENT_DATE_FEMENINO}</strong>
+                        </div>
+                      </div>
+                      <div className="detail-item">
+                        <MapPin size={16} />
+                        <span>Estadio Salvador Bonanno - Andes Talleres</span>
+                      </div>
+                      <div className="detail-item">
+                        <Users size={16} />
+                        <span>Categorías Formativas Femeninas y Primera División Femenina</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="btn-dinner-cta btn-cta-femenino"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setDinnerBranch('femenino')
+                        setCurrentStep('entradas')
+                        scrollToTop()
+                      }}
+                    >
+                      <span>COMPRAR ENTRADAS FEMENINO</span>
+                      <ArrowRight size={18} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Banner de Precios e Información Común */}
+                <div className="home-general-info-strip">
+                  <div className="info-strip-item">
+                    <Ticket size={18} color="#d92736" />
+                    <span>Entrada Acompañante con Sorteo: <b>{money(unitPrice)}</b></span>
+                  </div>
+                  <div className="info-strip-div" />
+                  <div className="info-strip-item">
+                    <span style={{ fontSize: '16px' }}>🏀</span>
+                    <span>Jugadores/as y Profes: <b style={{ color: '#00d2b4' }}>¡100% BONIFICADOS ($0)!</b></span>
+                  </div>
+                  <div className="info-strip-div" />
+                  <div className="info-strip-item">
+                    <span style={{ fontSize: '16px' }}>👶</span>
+                    <span>Menores de 3 años: <b style={{ color: '#38bdf8' }}>GRATIS ($0)</b></span>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -770,62 +867,46 @@ function App() {
             </div>
 
             <div className="form-container">
-              {/* 1. SELECCIÓN DE CENA (RAMA MASCULINA O FEMENINA) */}
-              <div className="dark-card dinner-branch-card">
-                <div className="card-top-header">
-                  <div className="card-icon-round" style={{ background: 'rgba(255, 107, 53, 0.15)', color: '#ff6b35' }}>
-                    🏀
-                  </div>
-                  <div>
-                    <h3>1. ¿A qué cena vas a asistir?</h3>
-                    <p>Seleccioná si vas a participar de la cena del básquet masculino o femenino</p>
-                  </div>
-                  <span className="card-right-badge" style={{ color: '#ff9d66', border: '1px solid rgba(255,107,53,0.3)' }}>
-                    Cena Oficial
-                  </span>
-                </div>
-
-                <div className="dinner-branch-grid">
-                  <div
-                    className={`dinner-branch-option ${dinnerBranch === 'masculino' ? 'selected' : ''}`}
-                    onClick={() => setDinnerBranch('masculino')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="dinner-branch-top">
-                      <span className="dinner-branch-icon">🏀</span>
-                      <div className="dinner-branch-title-wrap">
-                        <h4>Cena Básquet Masculino</h4>
-                        <span className="dinner-branch-tag tag-masculino">RAMA MASCULINA</span>
-                      </div>
-                      <div className="dinner-radio-dot">
-                        {dinnerBranch === 'masculino' && <div className="inner-dot" />}
+              {/* CENA SELECCIONADA CON FECHA Y ACCESO DIRECTO PARA CAMBIAR */}
+              <div className="dark-card selected-dinner-banner-card">
+                <div className="selected-dinner-banner-content">
+                  <div className="selected-dinner-left">
+                    <span className="selected-dinner-icon">🏀</span>
+                    <div>
+                      <div className="selected-dinner-kicker">CENA SELECCIONADA</div>
+                      <h3 className="selected-dinner-title">
+                        {DINNER_BRANCH_CONFIG[dinnerBranch].title}
+                      </h3>
+                      <div className="selected-dinner-date-row">
+                        <Calendar size={15} color={dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa'} />
+                        <strong style={{ color: dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa' }}>
+                          {getEventDateForBranch(dinnerBranch)}
+                        </strong>
+                        <span className="dot-sep">·</span>
+                        <MapPin size={14} color="#8a9ab5" />
+                        <span>Estadio Salvador Bonanno</span>
                       </div>
                     </div>
-                    <p className="dinner-branch-desc">
-                      Categorías formativas (Mosquitos a U21), Primera División Masculina y Maxibásquet.
-                    </p>
                   </div>
 
-                  <div
-                    className={`dinner-branch-option ${dinnerBranch === 'femenino' ? 'selected' : ''}`}
-                    onClick={() => setDinnerBranch('femenino')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="dinner-branch-top">
-                      <span className="dinner-branch-icon">🏀</span>
-                      <div className="dinner-branch-title-wrap">
-                        <h4>Cena Básquet Femenino</h4>
-                        <span className="dinner-branch-tag tag-femenino">RAMA FEMENINA</span>
-                      </div>
-                      <div className="dinner-radio-dot">
-                        {dinnerBranch === 'femenino' && <div className="inner-dot" />}
-                      </div>
+                  <div className="selected-dinner-actions">
+                    <span className="change-dinner-label">Cambiar de fecha/cena:</span>
+                    <div className="branch-switch-pills">
+                      <button
+                        type="button"
+                        className={`btn-switch-pill ${dinnerBranch === 'masculino' ? 'active-masc' : ''}`}
+                        onClick={() => setDinnerBranch('masculino')}
+                      >
+                        🏀 Masculino ({DINNER_BRANCH_CONFIG.masculino.shortDate})
+                      </button>
+                      <button
+                        type="button"
+                        className={`btn-switch-pill ${dinnerBranch === 'femenino' ? 'active-fem' : ''}`}
+                        onClick={() => setDinnerBranch('femenino')}
+                      >
+                        🏀 Femenino ({DINNER_BRANCH_CONFIG.femenino.shortDate})
+                      </button>
                     </div>
-                    <p className="dinner-branch-desc">
-                      Categorías formativas femeninas y Primera División Femenina.
-                    </p>
                   </div>
                 </div>
               </div>

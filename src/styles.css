@@ -836,6 +836,351 @@ button {
   font-size: 14px;
 }
 
+/* ══════════════════════════════════════════════════════════
+   SELECTOR DE CENAS EN EL INICIO (POR FECHAS DISTINTAS)
+   ══════════════════════════════════════════════════════════ */
+.home-events-section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+  margin: 10px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-events-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.home-events-heading {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.home-events-sub {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 620px;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.home-dinner-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.home-dinner-card {
+  background: rgba(10, 21, 36, 0.85);
+  border: 2px solid var(--navy-card-border);
+  border-radius: 16px;
+  padding: 28px 24px 22px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.home-dinner-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 107, 53, 0.2);
+}
+
+.home-dinner-card.card-masculino:hover,
+.home-dinner-card.card-masculino.active-dinner {
+  border-color: #3b82f6;
+  background: linear-gradient(155deg, rgba(30, 86, 153, 0.22) 0%, rgba(10, 21, 36, 0.95) 100%);
+  box-shadow: 0 14px 40px rgba(19, 57, 104, 0.4), 0 0 20px rgba(59, 130, 246, 0.25);
+}
+
+.home-dinner-card.card-femenino:hover,
+.home-dinner-card.card-femenino.active-dinner {
+  border-color: #00d2b4;
+  background: linear-gradient(155deg, rgba(0, 210, 180, 0.18) 0%, rgba(10, 21, 36, 0.95) 100%);
+  box-shadow: 0 14px 40px rgba(0, 210, 180, 0.3), 0 0 20px rgba(0, 210, 180, 0.2);
+}
+
+.home-dinner-top-tag {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.home-card-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+}
+
+.home-card-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+.home-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #c0d0e6;
+}
+
+.detail-item svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.detail-date-highlight {
+  background: rgba(30, 86, 153, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #ffffff;
+  align-items: center;
+}
+
+.detail-date-highlight small {
+  display: block;
+  font-size: 10px;
+  color: #93c5fd;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.detail-date-highlight strong {
+  font-size: 14.5px;
+  color: #ffffff;
+}
+
+.detail-date-highlight.detail-fem {
+  background: rgba(0, 210, 180, 0.15);
+  border-color: rgba(0, 210, 180, 0.35);
+}
+
+.detail-date-highlight.detail-fem small {
+  color: #00d2b4;
+}
+
+.btn-dinner-cta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cta-masculino {
+  background: linear-gradient(135deg, #1e5699 0%, #133968 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(19, 57, 104, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-cta-masculino:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e5699 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.5);
+}
+
+.btn-cta-femenino {
+  background: linear-gradient(135deg, #00d2b4 0%, #009982 100%);
+  color: #060d17;
+  font-weight: 900;
+  box-shadow: 0 4px 16px rgba(0, 210, 180, 0.4);
+}
+
+.btn-cta-femenino:hover {
+  background: linear-gradient(135deg, #14f8d7 0%, #00d2b4 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 210, 180, 0.6);
+}
+
+/* Tira informativa general */
+.home-general-info-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: rgba(6, 13, 23, 0.7);
+  border: 1px solid var(--navy-card-border);
+  padding: 12px 24px;
+  border-radius: 40px;
+  width: 100%;
+}
+
+.info-strip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #c2cad7;
+}
+
+.info-strip-div {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+/* Banner de cena seleccionada en el Paso de Entradas */
+.selected-dinner-banner-card {
+  padding: 20px 24px;
+  background: linear-gradient(145deg, rgba(15, 30, 51, 0.95) 0%, rgba(10, 21, 36, 0.95) 100%);
+  border: 1.5px solid var(--navy-card-border);
+}
+
+.selected-dinner-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.selected-dinner-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.selected-dinner-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+.selected-dinner-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.selected-dinner-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  color: #ffffff;
+  margin: 2px 0 4px;
+}
+
+.selected-dinner-date-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: #c0d0e6;
+}
+
+.dot-sep {
+  color: #50637c;
+}
+
+.selected-dinner-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.change-dinner-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.branch-switch-pills {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-switch-pill {
+  background: rgba(6, 13, 23, 0.7);
+  border: 1px solid var(--navy-card-border);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-switch-pill:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.btn-switch-pill.active-masc {
+  background: rgba(30, 86, 153, 0.35);
+  border-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-switch-pill.active-fem {
+  background: rgba(0, 210, 180, 0.25);
+  border-color: #00d2b4;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 210, 180, 0.3);
+}
+
 /* Tarjetas oscuras */
 .dark-card {
   background: var(--navy-surface);
