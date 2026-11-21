@@ -29,7 +29,6 @@ const DEFAULT_PRICE_ARS = 12000
 // Datos bancarios y de contacto oficiales
 const CLUB_ALIAS = (import.meta.env.VITE_CLUB_ALIAS as string) || 'atsc.basquet.fem'
 const CLUB_TITULAR = (import.meta.env.VITE_CLUB_TITULAR as string) || 'LAURA CAROLINA BAY'
-const CLUB_CUIT = (import.meta.env.VITE_CLUB_CUIT as string) || '20-27369915-6'
 const CLUB_BANCO = (import.meta.env.VITE_CLUB_BANCO as string) || 'Naranja X'
 const CLUB_CBU = (import.meta.env.VITE_CLUB_CBU as string) || ''
 const WHATSAPP_PHONE = (import.meta.env.VITE_WHATSAPP_PHONE as string) || '5492616133159'
@@ -1485,10 +1484,6 @@ function App() {
                         <b>{CLUB_TITULAR}</b>
                       </div>
                       <div className="cbu-row">
-                        <span>CUIT / CUIL:</span>
-                        <b>{CLUB_CUIT}</b>
-                      </div>
-                      <div className="cbu-row">
                         <span>Banco / Billetera:</span>
                         <b>{CLUB_BANCO}</b>
                       </div>
@@ -1669,7 +1664,7 @@ function App() {
                 </a>
 
                 <div style={{ textAlign: 'center', fontSize: '13px', color: '#8a9ab5', marginTop: '-6px' }}>
-                  <span>WhatsApp de comprobantes: <b>+54 9 261 575-1033</b> (2615751033)</span>
+                  <span>WhatsApp de comprobantes: <b>+54 9 261 613-3159</b> (2616133159)</span>
                 </div>
 
                 <div className="resend-info-note">
