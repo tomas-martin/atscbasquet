@@ -1451,9 +1451,9 @@ export default function AdminPage({
           attendeeName: t.attendee_name,
           qrToken: t.qr_token,
           orderId: order.id,
-          eventName: 'Cena de Fin de Año 2026 - Andes Talleres',
-          date: 'Viernes 18 de Diciembre de 2026 (18/12) · 21:00 hs',
-          venue: 'Estadio Salvador Bonanno - Andes Talleres',
+          eventName: 'Cena de Fin de Año 2026 - Andes Talleres Básquet Femenino',
+          date: 'Lunes 14 de Diciembre de 2026 (14/12) · 20:00 hs',
+          venue: 'Camping del Club Andes Talleres',
           isPlayer: isPl,
         }
       })
@@ -1573,9 +1573,9 @@ export default function AdminPage({
           attendeeName: t.attendee_name,
           qrToken: t.qr_token,
           orderId: order.id,
-          eventName: 'Cena de Fin de Año 2026 - Andes Talleres',
-          date: 'Viernes 18 de Diciembre de 2026 (18/12) · 21:00 hs',
-          venue: 'Estadio Salvador Bonanno - Andes Talleres',
+          eventName: 'Cena de Fin de Año 2026 - Andes Talleres Básquet Femenino',
+          date: 'Lunes 14 de Diciembre de 2026 (14/12) · 20:00 hs',
+          venue: 'Camping del Club Andes Talleres',
           isPlayer: isPl,
         }
       })
@@ -3453,7 +3453,7 @@ export default function AdminPage({
             <div className="padron-print-header">
               <div>
                 <h1>ANDES TALLERES SPORT CLUB</h1>
-                <p><b>CENA DE FIN DE AÑO 2026</b> · ESTADIO SALVADOR BONANNO - ANDES TALLERES (18/12)</p>
+                <p><b>CENA DE FIN DE AÑO 2026</b> · CAMPING DEL CLUB ANDES TALLERES (14/12)</p>
                 <p style={{ fontSize: '9pt', color: '#666' }}>Planilla Oficial de Conteo y Padrón de Asistentes clasificado por Categoría</p>
               </div>
               <div style={{ textAlign: 'right', fontSize: '9pt', color: '#555' }}>
