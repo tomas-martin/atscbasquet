@@ -468,7 +468,7 @@ function App() {
           dinnerBranch,
           isPlayer: true,
           role: 'jugador',
-          category: (p.category || 'Mosquitos') as Category,
+          category: (p.category || 'Escuela formativa') as Category,
         })
       }
 
@@ -503,7 +503,7 @@ function App() {
           dinnerBranch,
           isPlayer: false,
           role: 'acompanante',
-          category: (primaryCategory || 'Mosquitos') as Category,
+          category: (primaryCategory || 'Escuela formativa') as Category,
         })
       }
 
@@ -527,7 +527,7 @@ function App() {
           dinnerBranch,
           isPlayer: true,
           role: 'menor',
-          category: (primaryCategory || 'Mosquitos') as Category,
+          category: (primaryCategory || 'Escuela formativa') as Category,
         })
       }
 
@@ -568,7 +568,7 @@ function App() {
         attendeeDetails: tickets.map(t => ({
           name: t.attendeeName,
           role: t.role || (t.isPlayer ? 'jugador' : 'acompanante'),
-          category: (t.category || primaryCategory || 'Mosquitos') as Category
+          category: (t.category || primaryCategory || 'Escuela formativa') as Category
         }))
       }
 
@@ -836,7 +836,7 @@ function App() {
                         </span>
                       </div>
                       <span style={{ fontSize: '13px', color: '#c2cad7' }}>
-                        Chicas, jugadoras y cuerpo técnico de cualquier categoría de básquet femenino (Mosquitos hasta Primera y Maxi).
+                        Chicas, jugadoras y cuerpo técnico de cualquier categoría de básquet femenino (Escuela formativa hasta Primera y Maxi básquet).
                       </span>
                       <small style={{ color: '#8a9ab5', display: 'block', marginTop: '4px' }}>
                         Entrada bonificada sin costo al 100% · No participan del sorteo de premios

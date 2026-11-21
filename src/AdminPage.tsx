@@ -676,7 +676,7 @@ export default function AdminPage({
         } else if (raffleCategoryFilter === 'Sin Categoría') {
           if (p.isPhysical || p.category !== 'Sin Categoría') return false
         } else {
-          // Categoría deportiva específica (ej: Mosquitos, U15, Primera, etc.)
+          // Categoría deportiva específica (ej: Escuela formativa, Mini, Cadetes, Primera, etc.)
           if (p.isPhysical || p.category !== raffleCategoryFilter) return false
         }
       }

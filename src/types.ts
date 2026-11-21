@@ -28,16 +28,15 @@ export const DINNER_BRANCH_CONFIG: Record<DinnerBranch, {
 }
 
 export const CATEGORIES = [
-  'Mosquitos',
-  'Pre-Mini',
+  'Escuela formativa',
+  'Premini',
   'Mini',
-  'U13',
-  'U15',
-  'U17',
-  'U19',
-  'Primera División',
-  'Maxibásquet',
-  'Cuerpo Técnico / Dirigente'
+  'Infantiles',
+  'Cadetes',
+  'Juveniles',
+  'Promocional',
+  'Primera',
+  'Maxi básquet'
 ] as const
 
 export type Category = (typeof CATEGORIES)[number]
