@@ -641,9 +641,9 @@ function App() {
 
     // Emoji por rol (Unicode escapes para compatibilidad con WhatsApp URL)
     const roleEmoji = (role?: string) => {
-      if (role === 'jugador') return '\u26BD'  // ⚽
-      if (role === 'menor') return '\uD83D\uDC76'  // 👶
-      return '\uD83C\uDFAB'  // 🎫
+      if (role === 'jugador') return '\uD83C\uDFC0'  // 🏀 Básquet
+      if (role === 'menor') return '\uD83D\uDC76'    // 👶 Menor
+      return '\uD83C\uDFAB'                          // 🎫 Entrada
     }
 
     // Label por rol

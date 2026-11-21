@@ -87,3 +87,11 @@ create policy "tickets_select_policy" on public.tickets
 create policy "tickets_update_policy" on public.tickets
   for update using (true);
 
+-- Permisos de acceso para anon y authenticated
+grant usage on schema public to anon, authenticated;
+grant select, update on public.event_config to anon, authenticated;
+grant select, insert, update on public.orders to anon, authenticated;
+grant select, insert, update on public.tickets to anon, authenticated;
+grant usage, select on all sequences in schema public to anon, authenticated;
+
+
