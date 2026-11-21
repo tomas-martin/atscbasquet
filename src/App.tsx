@@ -27,9 +27,10 @@ import {
 const DEFAULT_PRICE_ARS = 12000
 
 // Datos bancarios y de contacto oficiales
-const CLUB_ALIAS = (import.meta.env.VITE_CLUB_ALIAS as string) || 'basquet.atsc'
-const CLUB_TITULAR = (import.meta.env.VITE_CLUB_TITULAR as string) || 'Subcomisión de Básquet ATSC'
-const CLUB_BANCO = (import.meta.env.VITE_CLUB_BANCO as string) || 'Banco / Billetera Virtual'
+const CLUB_ALIAS = (import.meta.env.VITE_CLUB_ALIAS as string) || 'atsc.basquet.fem'
+const CLUB_TITULAR = (import.meta.env.VITE_CLUB_TITULAR as string) || 'LAURA CAROLINA BAY'
+const CLUB_CUIT = (import.meta.env.VITE_CLUB_CUIT as string) || '20-27369915-6'
+const CLUB_BANCO = (import.meta.env.VITE_CLUB_BANCO as string) || 'Naranja X'
 const CLUB_CBU = (import.meta.env.VITE_CLUB_CBU as string) || ''
 const WHATSAPP_PHONE = (import.meta.env.VITE_WHATSAPP_PHONE as string) || '5492616133159'
 
@@ -638,7 +639,7 @@ function App() {
   // Generar URL de WhatsApp con mensaje prearmado
   const getWhatsAppUrl = () => {
     if (!orderConfirmation) return '#'
-    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino (${EVENT_DATE} en Estadio Salvador Bonanno).\n\n*Evento:* Cierre Básquet Femenino\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
+    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino (${EVENT_DATE} en ${EVENT_VENUE}).\n\n*Evento:* Cierre Básquet Femenino\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
     return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`
   }
 
@@ -1482,6 +1483,10 @@ function App() {
                       <div className="cbu-row">
                         <span>Titular de la cuenta:</span>
                         <b>{CLUB_TITULAR}</b>
+                      </div>
+                      <div className="cbu-row">
+                        <span>CUIT / CUIL:</span>
+                        <b>{CLUB_CUIT}</b>
                       </div>
                       <div className="cbu-row">
                         <span>Banco / Billetera:</span>
