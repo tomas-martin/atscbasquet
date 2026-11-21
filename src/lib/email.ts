@@ -88,7 +88,7 @@ export async function sendTicketsEmail(
             <span style="font-size: 14px; color: #ffffff;">🏀 <b>Evento:</b> <span style="color: #00d2b4; font-weight: 700;">Cena Andes Talleres Básquet Femenino 2026</span></span>
           </div>
           <p style="color: #c2cad7; line-height: 1.6; font-size: 14px;">
-            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino en el <b>Estadio Salvador Bonanno - Andes Talleres</b>.
+            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino en el <b>Camping del Club Andes Talleres</b>.
             Presentá los siguientes códigos QR en el ingreso del evento desde tu teléfono celular o impresos.
           </p>
           ${ticketsHtml}

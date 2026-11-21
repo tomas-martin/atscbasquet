@@ -35,7 +35,7 @@ const WHATSAPP_PHONE = (import.meta.env.VITE_WHATSAPP_PHONE as string) || '54926
 
 // Datos oficiales del evento
 const EVENT_NAME = 'Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet Femenino'
-const EVENT_VENUE = 'Estadio Salvador Bonanno - Andes Talleres Sport Club'
+const EVENT_VENUE = (import.meta.env.VITE_EVENT_VENUE as string) || 'Camping del Club Andes Talleres'
 const EVENT_DATE = (import.meta.env.VITE_EVENT_DATE as string) || (import.meta.env.VITE_EVENT_DATE_FEMENINO as string) || DINNER_BRANCH_CONFIG.femenino.defaultDate
 
 const getEventDateForBranch = (_branch?: DinnerBranch) => EVENT_DATE
