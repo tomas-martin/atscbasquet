@@ -19,8 +19,8 @@ export const DINNER_BRANCH_CONFIG: Record<DinnerBranch, {
   femenino: {
     title: 'Cena Básquet Femenino',
     subtitle: 'Formativa Femenina y Primera División Femenina',
-    defaultDate: 'Sábado 19 de Diciembre de 2026 (19/12) · 21:00 hs',
-    shortDate: 'Sábado 19/12 · 21:00 hs',
+    defaultDate: 'Lunes 14 de Diciembre de 2026 (14/12) · 20:00 hs',
+    shortDate: 'Lunes 14/12 · 20:00 hs',
     tag: 'Rama Femenina',
     badgeColor: '#00d2b4',
     categoriesDesc: 'Formativa Femenina y Primera División Femenina'

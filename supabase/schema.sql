@@ -1,5 +1,5 @@
 -- ==============================================================================
--- ATSC BÁSQUET 2026 — Base de Datos Oficial Supabase
+-- ATSC BÁSQUET FEMENINO 2026 — Base de Datos Oficial Supabase
 -- Ejecutar en el SQL Editor del NUEVO proyecto de Supabase para Básquet.
 -- ==============================================================================
 
@@ -10,7 +10,7 @@ create type public.order_status as enum ('pendiente', 'pagado', 'rechazado', 'ca
 
 create table public.event_config (
   id uuid primary key default gen_random_uuid(),
-  event_name text not null default 'Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet',
+  event_name text not null default 'Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet Femenino',
   event_date timestamptz,
   venue text default 'Estadio Salvador Bonanno - Andes Talleres',
   ticket_price_ars integer check (ticket_price_ars is null or ticket_price_ars >= 0),
@@ -22,7 +22,7 @@ create table public.event_config (
 );
 
 insert into public.event_config (event_name, ticket_price_ars, capacity, sales_enabled, logo_url)
-values ('Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet', 12000, 500, true, null);
+values ('Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet Femenino', 12000, 500, true, null);
 
 create table public.orders (
   id uuid primary key default gen_random_uuid(),
@@ -38,7 +38,7 @@ create table public.orders (
   provider_preference_id text,
   provider_payment_id text,
   transfer_reference text,
-  dinner_branch text not null default 'masculino', -- 'masculino' | 'femenino'
+  dinner_branch text not null default 'femenino', -- 'femenino'
   created_at timestamptz not null default now(),
   paid_at timestamptz,
   constraint orders_provider_payment_unique unique (provider_payment_id)
@@ -49,7 +49,7 @@ create table public.tickets (
   ticket_number serial, -- Número correlativo para sorteo (1, 2, 3...)
   order_id uuid not null references public.orders(id) on delete restrict,
   attendee_name text,
-  dinner_branch text not null default 'masculino',
+  dinner_branch text not null default 'femenino',
   qr_token uuid not null unique default gen_random_uuid(),
   status text not null default 'valid' check (status in ('valid', 'used', 'cancelled')),
   checked_in_at timestamptz,

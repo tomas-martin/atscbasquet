@@ -94,7 +94,7 @@ export default function AdminPage({
           return parsed.role
         }
       }
-    } catch {}
+    } catch { }
     return null
   })
   const [signedIn, setSignedIn] = useState<boolean>(() => {
@@ -109,7 +109,7 @@ export default function AdminPage({
     try {
       const saved = localStorage.getItem('atsc_admin_session_v2')
       if (saved) return JSON.parse(saved).username || null
-    } catch {}
+    } catch { }
     return null
   })
   const [usernameInput, setUsernameInput] = useState('')
@@ -144,7 +144,7 @@ export default function AdminPage({
     try {
       const saved = localStorage.getItem('atsc_physical_raffle_v1')
       if (saved) return JSON.parse(saved)
-    } catch {}
+    } catch { }
     return {
       startNumber: 1000,
       endNumber: 1100,
@@ -156,7 +156,7 @@ export default function AdminPage({
   useEffect(() => {
     try {
       localStorage.setItem('atsc_physical_raffle_v1', JSON.stringify(physicalConfig))
-    } catch {}
+    } catch { }
   }, [physicalConfig])
 
   const physicalTotalLot = Math.max(0, physicalConfig.endNumber - physicalConfig.startNumber + 1)
@@ -554,7 +554,7 @@ export default function AdminPage({
   useEffect(() => {
     try {
       localStorage.setItem('atsc_raffle_winners_v1', JSON.stringify(winnersHistory))
-    } catch {}
+    } catch { }
   }, [winnersHistory])
 
   // Participantes para sorteo (acompañantes y jugadores online + entradas físicas del talonario)
@@ -702,7 +702,7 @@ export default function AdminPage({
       gain.connect(ctx.destination)
       osc.start()
       osc.stop(ctx.currentTime + 0.05)
-    } catch {}
+    } catch { }
   }
 
   function playFanfareSound() {
@@ -726,7 +726,7 @@ export default function AdminPage({
         osc.start(now + idx * 0.1)
         osc.stop(now + idx * 0.1 + 0.85)
       })
-    } catch {}
+    } catch { }
   }
 
   // Animación de confeti profesional (canvas-confetti + canvas nativo de respaldo)
@@ -755,7 +755,7 @@ export default function AdminPage({
           colors: ['#133968', '#fbbf24', '#ffffff']
         })
       }, 250)
-    } catch {}
+    } catch { }
 
     const canvas = confettiCanvasRef.current
     if (!canvas) return
@@ -888,7 +888,7 @@ export default function AdminPage({
           return
         }
       }
-    } catch {}
+    } catch { }
 
     // Fallback Supabase session y listener reactivo
     if (supabase) {
@@ -994,14 +994,16 @@ export default function AdminPage({
     const p = passwordInput.trim()
 
     // 1. Super Usuario (acceso total: escáner, talonario físico, sorteos, padrón y conteo con PDF, tickets y pedidos)
+    const adminPass = (import.meta.env.VITE_ADMIN_PASSWORD as string) || 'cenabasquet2026'
     const isSuperUser =
-      (u === 'admin' || u === 'superadmin' || u === 'admin@atsc.com' || u === 'atsc') &&
-      (p === 'atsc2026' || p === 'admin' || p === 'admin2026')
+      (u === 'admin' || u === 'superadmin') &&
+      (p === adminPass || p === 'cenabasquet2026')
 
     // 2. Control en Puerta / Staff (solo puede escanear entradas o validar presencial en puerta)
+    const staffPass = (import.meta.env.VITE_STAFF_PASSWORD as string) || 'puerta2026'
     const isStaffUser =
-      (u === 'puerta' || u === 'control' || u === 'staff' || u === 'entrada' || u === 'puerta@atsc.com') &&
-      (p === 'puerta2026' || p === 'puerta' || p === 'control' || p === 'staff' || p === 'atsc2026')
+      (u === 'puerta' || u === 'control' || u === 'staff') &&
+      (p === staffPass || p === 'puerta2026')
 
     if (isSuperUser) {
       setUserRole('superuser')
@@ -1013,7 +1015,7 @@ export default function AdminPage({
           'atsc_admin_session_v2',
           JSON.stringify({ role: 'superuser', username: 'Super Administrador', timestamp: Date.now() })
         )
-      } catch {}
+      } catch { }
       setLoading(false)
       return
     }
@@ -1028,7 +1030,7 @@ export default function AdminPage({
           'atsc_admin_session_v2',
           JSON.stringify({ role: 'staff', username: 'Control de Puerta', timestamp: Date.now() })
         )
-      } catch {}
+      } catch { }
       setLoading(false)
       return
     }
@@ -1052,7 +1054,7 @@ export default function AdminPage({
               'atsc_admin_session_v2',
               JSON.stringify({ role: 'superuser', username: email, timestamp: Date.now() })
             )
-          } catch {}
+          } catch { }
           setLoading(false)
           return
         }
@@ -1076,11 +1078,11 @@ export default function AdminPage({
     stopScanner()
     try {
       localStorage.removeItem('atsc_admin_session_v2')
-    } catch {}
+    } catch { }
     if (supabase) {
       try {
         await supabase.auth.signOut()
-      } catch {}
+      } catch { }
     }
     setUserRole(null)
     setSignedIn(false)
@@ -1108,7 +1110,7 @@ export default function AdminPage({
             await html5QrCodeRef.current.stop()
           }
           await html5QrCodeRef.current.clear()
-        } catch {}
+        } catch { }
       }
 
       const qrScanner = new Html5Qrcode('qr-reader-viewport')
@@ -3185,8 +3187,8 @@ export default function AdminPage({
                     const text = currentWinner.isPhysical
                       ? `🏆 GANADOR DEL SORTEO ATSC\nN°: ${currentWinner.ticketNumber}\nTipo: Entrada Física / Talonario en mano\nEstado: Presentar talón físico N° ${currentWinner.ticketNumber} para retirar premio`
                       : currentWinner.role === 'jugador'
-                      ? `🏆 GANADOR DEL SORTEO ATSC (JUGADOR)\nCategoría: ${currentWinner.category || '—'}\nJugador: ${currentWinner.displayName || currentWinner.ticket.attendee_name}\nTitular / Familia: ${currentWinner.order?.buyer_full_name || '—'} (DNI: ${currentWinner.order?.buyer_dni || '—'})\nTeléfono: ${currentWinner.order?.buyer_phone || '—'}\nEstado: ${currentWinner.isCheckedIn ? 'Presente en el salón' : 'Sin ingreso registrado'}`
-                      : `🏆 GANADOR DEL SORTEO ATSC\nN°: ${currentWinner.ticketNumber}\nCategoría: ${currentWinner.category || '—'}\nAsistente: ${currentWinner.displayName || currentWinner.ticket.attendee_name}\nComprador: ${currentWinner.order?.buyer_full_name || '—'} (DNI: ${currentWinner.order?.buyer_dni || '—'})\nTeléfono: ${currentWinner.order?.buyer_phone || '—'}\nEstado: ${currentWinner.isCheckedIn ? 'Presente en el salón' : 'Sin ingreso registrado'}`
+                        ? `🏆 GANADOR DEL SORTEO ATSC (JUGADOR)\nCategoría: ${currentWinner.category || '—'}\nJugador: ${currentWinner.displayName || currentWinner.ticket.attendee_name}\nTitular / Familia: ${currentWinner.order?.buyer_full_name || '—'} (DNI: ${currentWinner.order?.buyer_dni || '—'})\nTeléfono: ${currentWinner.order?.buyer_phone || '—'}\nEstado: ${currentWinner.isCheckedIn ? 'Presente en el salón' : 'Sin ingreso registrado'}`
+                        : `🏆 GANADOR DEL SORTEO ATSC\nN°: ${currentWinner.ticketNumber}\nCategoría: ${currentWinner.category || '—'}\nAsistente: ${currentWinner.displayName || currentWinner.ticket.attendee_name}\nComprador: ${currentWinner.order?.buyer_full_name || '—'} (DNI: ${currentWinner.order?.buyer_dni || '—'})\nTeléfono: ${currentWinner.order?.buyer_phone || '—'}\nEstado: ${currentWinner.isCheckedIn ? 'Presente en el salón' : 'Sin ingreso registrado'}`
                     navigator.clipboard.writeText(text)
                     setCopiedRecordId('current')
                     setTimeout(() => setCopiedRecordId(null), 2500)
@@ -3231,8 +3233,8 @@ export default function AdminPage({
                         w.participant.isPhysical
                           ? `${idx + 1}. [N° ${w.participant.ticketNumber}] ${w.prizeName}: Boleto Físico (Talonario en mano)`
                           : w.participant.role === 'jugador'
-                          ? `${idx + 1}. [🏀 Jugador · ${w.participant.category || '—'}] ${w.prizeName}: ${w.participant.displayName || w.participant.ticket.attendee_name} (Familia: ${w.participant.order?.buyer_full_name || '—'} - Tel: ${w.participant.order?.buyer_phone || '—'})`
-                          : `${idx + 1}. [N° ${w.participant.ticketNumber} · ${w.participant.category || '—'}] ${w.prizeName}: ${w.participant.displayName || w.participant.ticket.attendee_name} (Comprador: ${w.participant.order?.buyer_full_name || '—'} - Tel: ${w.participant.order?.buyer_phone || '—'})`
+                            ? `${idx + 1}. [🏀 Jugador · ${w.participant.category || '—'}] ${w.prizeName}: ${w.participant.displayName || w.participant.ticket.attendee_name} (Familia: ${w.participant.order?.buyer_full_name || '—'} - Tel: ${w.participant.order?.buyer_phone || '—'})`
+                            : `${idx + 1}. [N° ${w.participant.ticketNumber} · ${w.participant.category || '—'}] ${w.prizeName}: ${w.participant.displayName || w.participant.ticket.attendee_name} (Comprador: ${w.participant.order?.buyer_full_name || '—'} - Tel: ${w.participant.order?.buyer_phone || '—'})`
                       ).join('\n')
                       navigator.clipboard.writeText(`🏆 GANADORES SORTEO CENA ANDES TALLERES:\n\n${listText}`)
                       setCopiedRecordId('all')

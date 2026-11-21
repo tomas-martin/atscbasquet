@@ -31,7 +31,7 @@ const CLUB_ALIAS = (import.meta.env.VITE_CLUB_ALIAS as string) || 'basquet.atsc'
 const CLUB_TITULAR = (import.meta.env.VITE_CLUB_TITULAR as string) || 'Subcomisión de Básquet ATSC'
 const CLUB_BANCO = (import.meta.env.VITE_CLUB_BANCO as string) || 'Banco / Billetera Virtual'
 const CLUB_CBU = (import.meta.env.VITE_CLUB_CBU as string) || ''
-const WHATSAPP_PHONE = (import.meta.env.VITE_WHATSAPP_PHONE as string) || '5492615751033'
+const WHATSAPP_PHONE = (import.meta.env.VITE_WHATSAPP_PHONE as string) || '5492616133159'
 
 // Datos oficiales del evento
 const EVENT_NAME = 'Gran Fiesta y Cierre de Año 2026 - Andes Talleres Básquet Femenino'
