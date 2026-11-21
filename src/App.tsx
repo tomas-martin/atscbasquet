@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from 'react'
 import {
   ArrowRight, ArrowLeft, CircleHelp,
   Minus, Plus, ShieldCheck, Ticket,
-  WalletCards, Calendar, MapPin, Users,
+  WalletCards, Calendar, MapPin,
   RefreshCw, Check, Copy, MessageCircle, AlertCircle,
   CheckCircle2, Sparkles
 } from 'lucide-react'
@@ -778,65 +778,28 @@ function App() {
               <button className="btn-back" onClick={() => { setCurrentStep('fiesta'); scrollToTop() }}>
                 <ArrowLeft size={16} /> Volver
               </button>
-              <div className="step-badge">PASO 1 DE 3 · SELECCIÓN DE ENTRADAS</div>
-              <h1>Armá tu grupo y seleccioná tus entradas</h1>
-              <p>Elegí quiénes asistirán al evento: jugadoras y profesoras bonificadas, acompañantes mayores y menores.</p>
+              <div className="step-badge">PASO 1 DE 3 · ENTRADAS</div>
+              <h1 style={{ fontSize: '24px', margin: '4px 0' }}>Seleccioná tus entradas</h1>
+              <p style={{ margin: 0, fontSize: '13px' }}>Cena Básquet Femenino · Lunes 14/12 · 20:00 hs</p>
             </div>
 
             <div className="form-container">
-              {/* BANNER DE IDENTIFICACIÓN DEL EVENTO */}
-              <div className="dark-card" style={{ background: 'linear-gradient(135deg, rgba(0, 210, 180, 0.08) 0%, rgba(19, 57, 104, 0.15) 100%)', border: '1px solid rgba(0, 210, 180, 0.3)', padding: '16px 20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <span style={{ fontSize: '30px' }}>🏀</span>
-                  <div>
-                    <div style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.08em', color: '#00d2b4', textTransform: 'uppercase' }}>
-                      Cena de Cierre de Año
-                    </div>
-                    <h3 style={{ margin: '2px 0 0', fontSize: '18px', fontWeight: 800, color: '#fff' }}>
-                      Andes Talleres · Básquet Femenino 2026
-                    </h3>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', fontSize: '13px', color: '#cbd5e1', flexWrap: 'wrap' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                        <Calendar size={14} color="#00d2b4" />
-                        <strong style={{ color: '#00d2b4' }}>{EVENT_DATE}</strong>
-                      </span>
-                      <span className="dot-sep">·</span>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                        <MapPin size={14} color="#8a9ab5" />
-                        <span>{EVENT_VENUE}</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* 1. SELECCIÓN DE ENTRADAS DEL GRUPO */}
-              <div className="dark-card">
-                <div className="card-top-header">
-                  <div className="card-icon-round"><Users size={20} /></div>
-                  <div>
-                    <h3>1. Entradas del Grupo (¿Quiénes van a la fiesta?)</h3>
-                    <p>Podés sumar a jugadoras y profesoras del club, acompañantes mayores y niñas/niños menores de 3 años</p>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="dark-card" style={{ padding: '14px 12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
 
                   {/* BLOQUE A: JUGADORAS Y PROFESORAS DEL CLUB (GRATIS $0) */}
-                  <div className="ticket-counter-box" style={{ background: 'rgba(0, 210, 180, 0.05)', border: '1px solid rgba(0, 210, 180, 0.3)', borderRadius: '8px', padding: '16px' }}>
+                  <div className="ticket-counter-box" style={{ background: 'rgba(0, 210, 180, 0.05)', border: '1px solid rgba(0, 210, 180, 0.25)', borderRadius: '8px', padding: '10px 12px', margin: 0 }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
-                        <strong style={{ color: '#00d2b4', fontSize: '15px' }}>🏀 Jugadoras y Profes del Club</strong>
-                        <span style={{ background: 'rgba(0, 210, 180, 0.2)', color: '#00d2b4', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>
-                          ¡ENTRADA BONIFICADA ($0)!
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: '#00d2b4', fontSize: '14px' }}>🏀 Jugadoras y Profes</strong>
+                        <span style={{ background: 'rgba(0, 210, 180, 0.2)', color: '#00d2b4', fontSize: '11px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>
+                          GRATIS ($0)
                         </span>
                       </div>
-                      <span style={{ fontSize: '13px', color: '#c2cad7' }}>
-                        Chicas, jugadoras y cuerpo técnico de cualquier categoría de básquet femenino (Escuela formativa hasta Primera y Maxi básquet).
+                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                        Bonificada 100% · Jugadoras y cuerpo técnico
                       </span>
-                      <small style={{ color: '#8a9ab5', display: 'block', marginTop: '4px' }}>
-                        Entrada bonificada sin costo al 100% · No participan del sorteo de premios
-                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -975,18 +938,15 @@ function App() {
 
 
                   {/* BLOQUE B: ACOMPAÑANTES MAYORES (PAGAN ENTRADA) */}
-                  <div className="ticket-counter-box" style={{ background: 'rgba(14, 26, 43, 0.5)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '16px' }}>
+                  <div className="ticket-counter-box" style={{ background: 'rgba(14, 26, 43, 0.5)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '10px 12px', margin: 0 }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
-                        <strong style={{ color: '#ffffff', fontSize: '15px' }}>🎟️ Acompañantes / Familiares</strong>
-                        <span className="price-big" style={{ fontSize: '20px' }}>{money(unitPrice)} <small style={{ fontSize: '12px', fontWeight: 'normal', color: '#8a9ab5' }}>c/u</small></span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: '#ffffff', fontSize: '14px' }}>🎟️ Acompañantes</strong>
+                        <span className="price-big" style={{ fontSize: '16px', color: '#ff6874' }}>{money(unitPrice)}</span>
                       </div>
-                      <span style={{ fontSize: '13px', color: '#c2cad7' }}>
-                        Papás, mamás, familiares y amigos mayores de 3 años.
+                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                        A partir de 3 años · Incluye número para sorteo
                       </span>
-                      <small style={{ color: '#fbbf24', display: 'block', marginTop: '4px', fontWeight: 'bold' }}>
-                        🎟️ Cada acompañante recibe su número oficial para el sorteo de premios
-                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -1011,20 +971,17 @@ function App() {
                   </div>
 
                   {/* BLOQUE C: MENORES DE 3 AÑOS (GRATIS $0) */}
-                  <div className="ticket-counter-box" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '16px' }}>
+                  <div className="ticket-counter-box" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '10px 12px', margin: 0 }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '2px' }}>
-                        <strong style={{ color: '#38bdf8', fontSize: '15px' }}>👶 Menores de 3 años</strong>
-                        <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>
-                          ¡NO PAGAN ENTRADA! ($0)
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: '#38bdf8', fontSize: '14px' }}>👶 Menores de 3 años</strong>
+                        <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '11px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>
+                          GRATIS ($0)
                         </span>
                       </div>
-                      <span style={{ fontSize: '13px', color: '#c2cad7' }}>
-                        ¿Llevás niños menores de 3 años cumplidos en el grupo?
+                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                        Ingreso bonificado sin costo
                       </span>
-                      <small style={{ color: '#8a9ab5', display: 'block', marginTop: '4px' }}>
-                        Ingreso bonificado sin costo · No participan del sorteo de premios
-                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -1058,7 +1015,7 @@ function App() {
                           background: 'transparent',
                           border: 'none',
                           color: '#8a9ab5',
-                          fontSize: '13px',
+                          fontSize: '12.5px',
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
@@ -1067,17 +1024,17 @@ function App() {
                           textDecoration: 'underline'
                         }}
                       >
-                        {showCustomNames ? '▲ Ocultar personalización de nombres' : '▼ ¿Querés personalizar los nombres en las entradas de acompañantes? (Opcional)'}
+                        {showCustomNames ? '▲ Ocultar nombres de acompañantes' : '▼ Personalizar nombres en las entradas (opcional)'}
                       </button>
 
                       {showCustomNames && (
-                        <div style={{ background: 'rgba(6, 13, 23, 0.7)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '14px', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                          <p style={{ fontSize: '12px', color: '#8a9ab5', margin: 0 }}>
-                            Si no los completás, las entradas se emitirán automáticamente a nombre del titular responsable ({buyer.fullName || 'Responsable'}).
+                        <div style={{ background: 'rgba(6, 13, 23, 0.7)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '12px', marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <p style={{ fontSize: '11.5px', color: '#8a9ab5', margin: 0 }}>
+                            Si no los completás, las entradas saldrán a nombre del titular responsable ({buyer.fullName || 'Titular'}).
                           </p>
 
                           {Array.from({ length: companionCount }).map((_, idx) => (
-                            <div key={`comp-${idx}`} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <div key={`comp-${idx}`} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                               <label style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 600 }}>
                                 Nombre Acompañante #{idx + 1}
                               </label>
@@ -1090,13 +1047,13 @@ function App() {
                                   updated[idx] = e.target.value
                                   setCustomCompanionNames(updated)
                                 }}
-                                style={{ background: 'rgba(14, 26, 43, 0.8)', border: '1px solid var(--navy-card-border)', borderRadius: '4px', padding: '8px 10px', color: '#fff', fontSize: '13px' }}
+                                style={{ background: 'rgba(14, 26, 43, 0.8)', border: '1px solid var(--navy-card-border)', borderRadius: '4px', padding: '7px 10px', color: '#fff', fontSize: '13px' }}
                               />
                             </div>
                           ))}
 
                           {Array.from({ length: childrenCount }).map((_, idx) => (
-                            <div key={`child-${idx}`} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <div key={`child-${idx}`} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                               <label style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 600 }}>
                                 Nombre Menor &lt;3 años #{idx + 1}
                               </label>
@@ -1109,7 +1066,7 @@ function App() {
                                   updated[idx] = e.target.value
                                   setCustomChildNames(updated)
                                 }}
-                                style={{ background: 'rgba(14, 26, 43, 0.8)', border: '1px solid var(--navy-card-border)', borderRadius: '4px', padding: '8px 10px', color: '#fff', fontSize: '13px' }}
+                                style={{ background: 'rgba(14, 26, 43, 0.8)', border: '1px solid var(--navy-card-border)', borderRadius: '4px', padding: '7px 10px', color: '#fff', fontSize: '13px' }}
                               />
                             </div>
                           ))}
@@ -1122,29 +1079,20 @@ function App() {
               </div>
 
               {/* Barra Resumen de Selección */}
-              <div className="dark-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', background: 'rgba(10, 21, 36, 0.75)', border: '1px solid #182d49', borderRadius: '10px', padding: '18px 22px' }}>
+              <div className="dark-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: 'rgba(10, 21, 36, 0.85)', border: '1px solid #182d49', borderRadius: '8px', padding: '12px 14px', margin: '4px 0 10px' }}>
                 <div>
-                  <div style={{ fontSize: '12px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
-                    Entradas Seleccionadas
+                  <div style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700 }}>
+                    Entradas: <b style={{ color: '#fff', fontSize: '14px' }}>{quantity}</b>
                   </div>
-                  <div style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', marginTop: '2px' }}>
-                    {quantity} {quantity === 1 ? 'Entrada' : 'Entradas'}
-                    {quantity > 0 && (
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#00d2b4', marginLeft: '10px' }}>
-                        ({players.length > 0 ? `${players.length} Jugador${players.length > 1 ? 'es' : ''}` : ''}
-                        {players.length > 0 && companionCount > 0 ? ' · ' : ''}
-                        {companionCount > 0 ? `${companionCount} Acompañante${companionCount > 1 ? 's' : ''}` : ''}
-                        {(players.length > 0 || companionCount > 0) && childrenCount > 0 ? ' · ' : ''}
-                        {childrenCount > 0 ? `${childrenCount} Menor${childrenCount > 1 ? 'es' : ''}` : ''})
-                      </span>
-                    )}
+                  <div style={{ fontSize: '12px', color: '#00d2b4', marginTop: '2px' }}>
+                    {players.length > 0 && `${players.length} jug `}
+                    {companionCount > 0 && `${companionCount} acomp `}
+                    {childrenCount > 0 && `${childrenCount} men`}
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '12px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
-                    Total Estimado
-                  </div>
-                  <div style={{ fontSize: '26px', fontWeight: 900, color: total > 0 ? '#ff6874' : '#00d2b4', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700 }}>Total</div>
+                  <div style={{ fontSize: '20px', fontWeight: 900, color: total > 0 ? '#ff6874' : '#00d2b4' }}>
                     {total > 0 ? money(total) : '¡GRATIS! ($0)'}
                   </div>
                 </div>
@@ -1186,44 +1134,33 @@ function App() {
                 <ArrowLeft size={16} /> Modificar Entradas
               </button>
               <div className="step-badge">PASO 2 DE 3 · TUS DATOS</div>
-              <h1>Cargá tus datos de contacto</h1>
-              <p>Persona que gestiona la compra (papá, mamá o titular) y a quien se enviarán las entradas con QR.</p>
+              <h1 style={{ fontSize: '24px', margin: '4px 0' }}>Datos de contacto</h1>
+              <p style={{ margin: 0, fontSize: '13px' }}>A quien se enviarán las entradas y códigos QR</p>
             </div>
 
             {/* Resumen compacto de las entradas seleccionadas */}
-            <div className="dark-card" style={{ padding: '14px 20px', background: 'rgba(10, 21, 36, 0.65)', border: '1px solid #182d49', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '22px' }}>🎟️</span>
-                <div>
-                  <strong style={{ fontSize: '15px', color: '#fff' }}>
-                    {quantity} {quantity === 1 ? 'Entrada seleccionada' : 'Entradas seleccionadas'}
-                  </strong>
-                  <div style={{ fontSize: '12px', color: '#8a9ab5', marginTop: '2px' }}>
-                    {players.length > 0 && `${players.length} Jugador(es) bonificado(s) `}
-                    {companionCount > 0 && `· ${companionCount} Acompañante(s) con sorteo `}
-                    {childrenCount > 0 && `· ${childrenCount} Menor(es) <3 `}
-                    · Total a pagar: <b style={{ color: total > 0 ? '#ff6874' : '#00d2b4' }}>{money(total)}</b>
-                  </div>
-                </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(10, 21, 36, 0.65)', border: '1px solid #182d49', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px' }}>
+              <div style={{ fontSize: '13px', color: '#fff' }}>
+                🎟️ <b>{quantity} entrada{quantity > 1 ? 's' : ''}</b> · Total: <b style={{ color: total > 0 ? '#ff6874' : '#00d2b4' }}>{money(total)}</b>
               </div>
               <button
                 type="button"
                 className="btn-dash-outline"
-                style={{ padding: '6px 14px', fontSize: '12px', color: '#cbd5e1', borderColor: 'rgba(255, 255, 255, 0.2)' }}
+                style={{ padding: '4px 10px', fontSize: '11px', color: '#cbd5e1' }}
                 onClick={() => { setCurrentStep('entradas'); scrollToTop() }}
               >
-                ✏️ Modificar cantidad
+                ✏️ Modificar
               </button>
             </div>
 
             <form onSubmit={handleProceedToPayment} className="form-container" noValidate>
-              {/* 2. DATOS DEL RESPONSABLE DE LA COMPRA */}
-              <div className="dark-card">
-                <div className="card-top-header">
-                  <div className="card-icon-round"><WalletCards size={20} /></div>
+              {/* DATOS DEL RESPONSABLE DE LA COMPRA */}
+              <div className="dark-card" style={{ padding: '16px 14px' }}>
+                <div className="card-top-header" style={{ marginBottom: '14px' }}>
+                  <div className="card-icon-round"><WalletCards size={18} /></div>
                   <div>
-                    <h3>2. Datos de Contacto del Responsable</h3>
-                    <p>Persona que gestiona la compra (papá, mamá o titular) y a quien se enviarán las entradas con QR</p>
+                    <h3 style={{ fontSize: '16px', margin: 0 }}>Datos del Responsable</h3>
+                    <p style={{ fontSize: '12px', margin: '2px 0 0' }}>Titular para la emisión de las entradas</p>
                   </div>
                 </div>
 
@@ -1376,49 +1313,15 @@ function App() {
                 </div>
               </div>
 
-              {/* 3. RESUMEN EN VIVO DE ENTRADAS Y TOTAL */}
-              <div className="dark-card">
-                <div className="card-top-header">
-                  <div className="card-icon-round"><CheckCircle2 size={20} /></div>
-                  <div>
-                    <h3>3. Resumen de tu Pedido</h3>
-                    <p>Verificá la cantidad de entradas y el total antes de continuar</p>
-                  </div>
+              {/* BARRA RESUMEN TOTAL COMPACTA */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(10, 21, 36, 0.85)', border: '1px solid #182d49', borderRadius: '8px', padding: '12px 14px', margin: '4px 0 10px' }}>
+                <div>
+                  <span style={{ fontSize: '12px', color: '#8a9ab5' }}>Total ({quantity} entrada{quantity > 1 ? 's' : ''}):</span>
+                  <div style={{ fontSize: '11px', color: '#00d2b4' }}>Cat: {primaryCategory}</div>
                 </div>
-
-                <div className="ticket-pricing-summary" style={{ marginTop: '0' }}>
-                  <div className="summary-breakdown-row" style={{ fontSize: '13px', color: '#00d2b4', paddingBottom: '8px', borderBottom: '1px dashed rgba(255,255,255,0.12)' }}>
-                    <span>Evento:</span>
-                    <strong>Cierre Básquet Femenino 2026</strong>
-                  </div>
-                  {players.length > 0 && (
-                    <div className="summary-breakdown-row">
-                      <span>🏀 Entradas Jugadoras y Profes ({players.length}):</span>
-                      <strong className="text-green">¡GRATIS! ($0)</strong>
-                    </div>
-                  )}
-                  {childrenCount > 0 && (
-                    <div className="summary-breakdown-row">
-                      <span>👶 Menores de 3 años ({childrenCount}):</span>
-                      <strong style={{ color: '#38bdf8' }}>¡GRATIS! ($0)</strong>
-                    </div>
-                  )}
-                  {companionCount > 0 && (
-                    <div className="summary-breakdown-row">
-                      <span>🎟️ Acompañantes con Sorteo ({companionCount}):</span>
-                      <strong>{money(companionCount * unitPrice)}</strong>
-                    </div>
-                  )}
-                  <div className="summary-breakdown-row" style={{ fontSize: '12px', color: '#8a9ab5' }}>
-                    <span>Categoría de referencia:</span>
-                    <b style={{ color: '#ffffff' }}>{primaryCategory}</b>
-                  </div>
-                  <div className="summary-divider-line" />
-                  <div className="summary-total-calc-row">
-                    <span>Total a pagar ({quantity} entrada{quantity > 1 ? 's' : ''}):</span>
-                    <strong className="total-amount-highlight">{money(total)}</strong>
-                  </div>
-                </div>
+                <strong style={{ fontSize: '20px', color: total > 0 ? '#ff6874' : '#00d2b4', fontWeight: 900 }}>
+                  {total > 0 ? money(total) : '¡GRATIS! ($0)'}
+                </strong>
               </div>
 
               {errorMessage && (
