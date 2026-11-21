@@ -778,28 +778,33 @@ function App() {
               <button className="btn-back" onClick={() => { setCurrentStep('fiesta'); scrollToTop() }}>
                 <ArrowLeft size={16} /> Volver
               </button>
-              <div className="step-badge">PASO 1 DE 3 · ENTRADAS</div>
-              <h1 style={{ fontSize: '24px', margin: '4px 0' }}>Seleccioná tus entradas</h1>
-              <p style={{ margin: 0, fontSize: '13px' }}>Cena Básquet Femenino · Lunes 14/12 · 20:00 hs</p>
+              <div className="step-badge">PASO 1 DE 3 · SELECCIÓN DE ENTRADAS</div>
+              <h1 style={{ fontSize: '26px', margin: '4px 0' }}>Armá tu grupo y seleccioná tus entradas</h1>
+              <p style={{ margin: 0, fontSize: '13.5px', color: '#8a9ab5' }}>
+                Cena Básquet Femenino · Lunes 14/12 · 20:00 hs · Camping Andes Talleres
+              </p>
             </div>
 
             <div className="form-container">
               {/* 1. SELECCIÓN DE ENTRADAS DEL GRUPO */}
-              <div className="dark-card" style={{ padding: '14px 12px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div className="dark-card" style={{ padding: '16px 14px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
                   {/* BLOQUE A: JUGADORAS Y PROFESORAS DEL CLUB (GRATIS $0) */}
-                  <div className="ticket-counter-box" style={{ background: 'rgba(0, 210, 180, 0.05)', border: '1px solid rgba(0, 210, 180, 0.25)', borderRadius: '8px', padding: '10px 12px', margin: 0 }}>
+                  <div className="ticket-counter-box" style={{ background: 'rgba(0, 210, 180, 0.05)', border: '1px solid rgba(0, 210, 180, 0.28)', borderRadius: '8px', padding: '14px 14px', margin: 0 }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        <strong style={{ color: '#00d2b4', fontSize: '14px' }}>🏀 Jugadoras y Profes</strong>
-                        <span style={{ background: 'rgba(0, 210, 180, 0.2)', color: '#00d2b4', fontSize: '11px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>
-                          GRATIS ($0)
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: '#00d2b4', fontSize: '15px' }}>🏀 Jugadoras y Profes del Club</strong>
+                        <span style={{ background: 'rgba(0, 210, 180, 0.2)', color: '#00d2b4', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>
+                          ¡BONIFICADA ($0)!
                         </span>
                       </div>
-                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>
-                        Bonificada 100% · Jugadoras y cuerpo técnico
+                      <span style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '3px', display: 'block' }}>
+                        Chicas, jugadoras de todas las categorías (Escuela formativa hasta Primera y Maxi básquet) y cuerpo técnico. Entrada 100% bonificada sin costo por el club.
                       </span>
+                      <small style={{ color: '#8a9ab5', display: 'block', marginTop: '3px', fontSize: '11px' }}>
+                        * Acceso bonificado al evento (no participan del sorteo de premios).
+                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -938,15 +943,18 @@ function App() {
 
 
                   {/* BLOQUE B: ACOMPAÑANTES MAYORES (PAGAN ENTRADA) */}
-                  <div className="ticket-counter-box" style={{ background: 'rgba(14, 26, 43, 0.5)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '10px 12px', margin: 0 }}>
+                  <div className="ticket-counter-box" style={{ background: 'rgba(14, 26, 43, 0.5)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '14px 14px', margin: 0 }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        <strong style={{ color: '#ffffff', fontSize: '14px' }}>🎟️ Acompañantes</strong>
-                        <span className="price-big" style={{ fontSize: '16px', color: '#ff6874' }}>{money(unitPrice)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: '#ffffff', fontSize: '15px' }}>🎟️ Acompañantes y Familiares</strong>
+                        <span className="price-big" style={{ fontSize: '18px', color: '#ff6874' }}>{money(unitPrice)} <small style={{ fontSize: '12px', color: '#8a9ab5', fontWeight: 'normal' }}>c/u</small></span>
                       </div>
-                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>
-                        A partir de 3 años · Incluye número para sorteo
+                      <span style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '3px', display: 'block' }}>
+                        Papás, mamás, familiares y amigos mayores de 3 años.
                       </span>
+                      <small style={{ color: '#fbbf24', display: 'block', marginTop: '3px', fontSize: '11.5px', fontWeight: 600 }}>
+                        🎟️ Cada acompañante recibe su número oficial para el sorteo de premios.
+                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -971,17 +979,20 @@ function App() {
                   </div>
 
                   {/* BLOQUE C: MENORES DE 3 AÑOS (GRATIS $0) */}
-                  <div className="ticket-counter-box" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '10px 12px', margin: 0 }}>
+                  <div className="ticket-counter-box" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '14px 14px', margin: 0 }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        <strong style={{ color: '#38bdf8', fontSize: '14px' }}>👶 Menores de 3 años</strong>
-                        <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '11px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>
-                          GRATIS ($0)
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: '#38bdf8', fontSize: '15px' }}>👶 Menores de 3 años</strong>
+                        <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>
+                          ¡NO PAGAN ENTRADA! ($0)
                         </span>
                       </div>
-                      <span style={{ fontSize: '12px', color: '#94a3b8' }}>
-                        Ingreso bonificado sin costo
+                      <span style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '3px', display: 'block' }}>
+                        Niños y niñas menores de 3 años cumplidos en el grupo familiar.
                       </span>
+                      <small style={{ color: '#8a9ab5', display: 'block', marginTop: '3px', fontSize: '11px' }}>
+                        * Ingreso bonificado sin costo (no participan del sorteo de premios).
+                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -1030,7 +1041,7 @@ function App() {
                       {showCustomNames && (
                         <div style={{ background: 'rgba(6, 13, 23, 0.7)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '12px', marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           <p style={{ fontSize: '11.5px', color: '#8a9ab5', margin: 0 }}>
-                            Si no los completás, las entradas saldrán a nombre del titular responsable ({buyer.fullName || 'Titular'}).
+                            Si no los completás, las entradas saldrán automáticamente a nombre del titular responsable ({buyer.fullName || 'Titular'}).
                           </p>
 
                           {Array.from({ length: companionCount }).map((_, idx) => (
@@ -1078,23 +1089,36 @@ function App() {
                 </div>
               </div>
 
-              {/* Barra Resumen de Selección */}
-              <div className="dark-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', background: 'rgba(10, 21, 36, 0.85)', border: '1px solid #182d49', borderRadius: '8px', padding: '12px 14px', margin: '4px 0 10px' }}>
-                <div>
-                  <div style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700 }}>
-                    Entradas: <b style={{ color: '#fff', fontSize: '14px' }}>{quantity}</b>
+              {/* Barra Resumen de Selección con Información */}
+              <div className="dark-card" style={{ background: 'rgba(10, 21, 36, 0.85)', border: '1px solid #182d49', borderRadius: '10px', padding: '16px', margin: '4px 0 14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <div style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+                      Resumen de tu selección
+                    </div>
+                    <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff', marginTop: '2px' }}>
+                      {quantity} {quantity === 1 ? 'Entrada' : 'Entradas'} en total
+                    </div>
+                    {quantity > 0 && (
+                      <div style={{ fontSize: '12.5px', color: '#00d2b4', marginTop: '3px' }}>
+                        {players.length > 0 && `${players.length} Jugadora${players.length > 1 ? 's' : ''} ($0) `}
+                        {companionCount > 0 && `· ${companionCount} Acompañante${companionCount > 1 ? 's' : ''} `}
+                        {childrenCount > 0 && `· ${childrenCount} Menor${childrenCount > 1 ? 'es' : ''} <3 `}
+                      </div>
+                    )}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#00d2b4', marginTop: '2px' }}>
-                    {players.length > 0 && `${players.length} jug `}
-                    {companionCount > 0 && `${companionCount} acomp `}
-                    {childrenCount > 0 && `${childrenCount} men`}
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+                      Total a Pagar
+                    </div>
+                    <div style={{ fontSize: '24px', fontWeight: 900, color: total > 0 ? '#ff6874' : '#00d2b4', marginTop: '2px' }}>
+                      {total > 0 ? money(total) : '¡GRATIS! ($0)'}
+                    </div>
                   </div>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700 }}>Total</div>
-                  <div style={{ fontSize: '20px', fontWeight: 900, color: total > 0 ? '#ff6874' : '#00d2b4' }}>
-                    {total > 0 ? money(total) : '¡GRATIS! ($0)'}
-                  </div>
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '12px', paddingTop: '10px', display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', fontSize: '12px', color: '#8a9ab5' }}>
+                  <span>📍 <b>Lugar:</b> Camping Andes Talleres</span>
+                  <span>📅 <b>Fecha:</b> Lunes 14/12 · 20:00 hs</span>
                 </div>
               </div>
 
@@ -1134,23 +1158,47 @@ function App() {
                 <ArrowLeft size={16} /> Modificar Entradas
               </button>
               <div className="step-badge">PASO 2 DE 3 · TUS DATOS</div>
-              <h1 style={{ fontSize: '24px', margin: '4px 0' }}>Datos de contacto</h1>
-              <p style={{ margin: 0, fontSize: '13px' }}>A quien se enviarán las entradas y códigos QR</p>
+              <h1 style={{ fontSize: '26px', margin: '4px 0' }}>Datos del Responsable de la Compra</h1>
+              <p style={{ margin: 0, fontSize: '13.5px', color: '#8a9ab5' }}>
+                Persona a cargo del grupo a quien se le enviarán las entradas y códigos QR por correo.
+              </p>
             </div>
 
-            {/* Resumen compacto de las entradas seleccionadas */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(10, 21, 36, 0.65)', border: '1px solid #182d49', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px' }}>
-              <div style={{ fontSize: '13px', color: '#fff' }}>
-                🎟️ <b>{quantity} entrada{quantity > 1 ? 's' : ''}</b> · Total: <b style={{ color: total > 0 ? '#ff6874' : '#00d2b4' }}>{money(total)}</b>
+            {/* Resumen detallado pero ordenado de las entradas seleccionadas */}
+            <div className="dark-card" style={{ padding: '14px 16px', background: 'rgba(10, 21, 36, 0.75)', border: '1px solid #182d49', borderRadius: '10px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '18px' }}>🎟️</span>
+                  <strong style={{ fontSize: '15px', color: '#fff' }}>
+                    {quantity} {quantity === 1 ? 'Entrada seleccionada' : 'Entradas seleccionadas'}
+                  </strong>
+                </div>
+                <button
+                  type="button"
+                  className="btn-dash-outline"
+                  style={{ padding: '4px 12px', fontSize: '11px', color: '#cbd5e1' }}
+                  onClick={() => { setCurrentStep('entradas'); scrollToTop() }}
+                >
+                  ✏️ Modificar
+                </button>
               </div>
-              <button
-                type="button"
-                className="btn-dash-outline"
-                style={{ padding: '4px 10px', fontSize: '11px', color: '#cbd5e1' }}
-                onClick={() => { setCurrentStep('entradas'); scrollToTop() }}
-              >
-                ✏️ Modificar
-              </button>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', fontSize: '12px' }}>
+                {players.length > 0 && (
+                  <span style={{ background: 'rgba(0, 210, 180, 0.12)', color: '#00d2b4', border: '1px solid rgba(0, 210, 180, 0.25)', padding: '3px 8px', borderRadius: '4px' }}>
+                    🏀 {players.length} Jugadora/Profe (Gratis)
+                  </span>
+                )}
+                {companionCount > 0 && (
+                  <span style={{ background: 'rgba(255, 104, 116, 0.12)', color: '#ff6874', border: '1px solid rgba(255, 104, 116, 0.25)', padding: '3px 8px', borderRadius: '4px' }}>
+                    🎟️ {companionCount} Acompañante con sorteo ({money(companionCount * unitPrice)})
+                  </span>
+                )}
+                {childrenCount > 0 && (
+                  <span style={{ background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.25)', padding: '3px 8px', borderRadius: '4px' }}>
+                    👶 {childrenCount} Menor &lt;3 (Gratis)
+                  </span>
+                )}
+              </div>
             </div>
 
             <form onSubmit={handleProceedToPayment} className="form-container" noValidate>
@@ -1313,15 +1361,22 @@ function App() {
                 </div>
               </div>
 
-              {/* BARRA RESUMEN TOTAL COMPACTA */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(10, 21, 36, 0.85)', border: '1px solid #182d49', borderRadius: '8px', padding: '12px 14px', margin: '4px 0 10px' }}>
-                <div>
-                  <span style={{ fontSize: '12px', color: '#8a9ab5' }}>Total ({quantity} entrada{quantity > 1 ? 's' : ''}):</span>
-                  <div style={{ fontSize: '11px', color: '#00d2b4' }}>Cat: {primaryCategory}</div>
+              {/* Cuadro Resumen antes del pago */}
+              <div className="dark-card" style={{ padding: '14px 16px', background: 'rgba(10, 21, 36, 0.85)', border: '1px solid #182d49', borderRadius: '10px', margin: '4px 0 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#8a9ab5', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+                      Total a abonar ({quantity} entrada{quantity > 1 ? 's' : ''})
+                    </span>
+                    <div style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '2px' }}>
+                      Categoría: <b style={{ color: '#ffffff' }}>{primaryCategory}</b>
+                      {buyer.fullName ? ` · Titular: ${buyer.fullName}` : ''}
+                    </div>
+                  </div>
+                  <strong style={{ fontSize: '24px', color: total > 0 ? '#ff6874' : '#00d2b4', fontWeight: 900 }}>
+                    {total > 0 ? money(total) : '¡GRATIS! ($0)'}
+                  </strong>
                 </div>
-                <strong style={{ fontSize: '20px', color: total > 0 ? '#ff6874' : '#00d2b4', fontWeight: 900 }}>
-                  {total > 0 ? money(total) : '¡GRATIS! ($0)'}
-                </strong>
               </div>
 
               {errorMessage && (
