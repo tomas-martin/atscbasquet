@@ -3,18 +3,21 @@ import type { OrderConfirmation } from '../types'
 /**
  * Envío de email con las entradas y códigos QR mediante SMTP (Nodemailer).
  * Llama a la ruta serverless `/api/send-email` tanto en desarrollo local como en producción (Vercel).
+ * Diseño 100% responsive, compatible con Modo Claro y Modo Oscuro en Gmail, Apple Mail, Outlook y webmail.
  */
 export async function sendTicketsEmail(
   confirmation: OrderConfirmation,
   qrDataUrls: Record<string, string>
 ): Promise<{ success: boolean; message: string; messageId?: string }> {
   try {
-    // Generar attachments con Content-ID (CID) para que Gmail y otros clientes muestren el QR inline de forma óptima
     const attachments: Array<{
       filename: string
       path: string
       cid: string
     }> = []
+
+    const EVENT_DATE_FORMATTED = 'Lunes 14 de Diciembre de 2026 · 20:00 hs'
+    const EVENT_VENUE_FORMATTED = 'Camping del Club Andes Talleres'
 
     const ticketsHtml = confirmation.tickets.map((t, idx) => {
       const cidName = `qr-ticket-${idx}-${t.qrToken.slice(0, 8)}`
@@ -28,7 +31,6 @@ export async function sendTicketsEmail(
         })
       }
 
-      // Usar cid si está disponible o el data url
       const qrImageSrc = qrDataUrl ? `cid:${cidName}` : ''
 
       const isPlayer =
@@ -44,69 +46,283 @@ export async function sendTicketsEmail(
         t.ticketNumber === 'MENOR' ||
         /menor/i.test(t.attendeeName)
 
-      const headerTitle = isPlayer
-        ? `<strong style="color: #ffffff; font-size: 18px; letter-spacing: 0.5px;">ENTRADA JUGADOR / PROFE</strong>
-           <div style="color: #60a5fa; font-size: 11px; font-weight: bold; margin-top: 3px;">⚽ ACCESO BONIFICADO (SIN SORTEO)</div>`
-        : isChild
-        ? `<strong style="color: #ffffff; font-size: 18px; letter-spacing: 0.5px;">MENOR DE 3 AÑOS</strong>
-           <div style="color: #38bdf8; font-size: 11px; font-weight: bold; margin-top: 3px;">👶 ENTRADA BONIFICADA ($0 · SIN SORTEO)</div>`
-        : `<strong style="color: #ffffff; font-size: 18px; letter-spacing: 0.5px;">ENTRADA N° ${t.ticketNumber.replace(/^N°\s*/i, '')}</strong>
-           <div style="color: #fbbf24; font-size: 11px; font-weight: bold; margin-top: 3px;">🎟️ NÚMERO VÁLIDO PARA EL SORTEO</div>`
+      // Colores y badges por tipo de entrada
+      let badgeBg = '#d97706'
+      let badgeTextColor = '#ffffff'
+      let badgeLabel = `🎟️ ENTRADA N° ${t.ticketNumber.replace(/^N°\s*/i, '')} · SORTEO`
+      let badgeSub = 'Número oficial para el gran sorteo'
+      let accentBorderColor = '#f59e0b'
+
+      if (isPlayer) {
+        badgeBg = '#059669'
+        badgeTextColor = '#ffffff'
+        badgeLabel = '🏀 JUGADORA / PROFE'
+        badgeSub = 'Acceso bonificado por el club'
+        accentBorderColor = '#10b981'
+      } else if (isChild) {
+        badgeBg = '#0284c7'
+        badgeTextColor = '#ffffff'
+        badgeLabel = '👶 MENOR DE 3 AÑOS'
+        badgeSub = 'Entrada bonificada sin costo'
+        accentBorderColor = '#38bdf8'
+      }
 
       return `
-        <div style="background:#0f1c2e; border: 1px solid #1a2d47; border-radius: 8px; padding: 20px; margin-bottom: 20px; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-          <div style="border-bottom: 2px solid #d92736; padding-bottom: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              ${headerTitle}
-            </div>
-            <span style="color: #d92736; font-weight: bold; font-size: 13px; background: rgba(217,39,54,0.15); padding: 4px 10px; border-radius: 4px;">ATSC 2026</span>
-          </div>
-          <p style="margin: 6px 0; color: #8a9ab5; font-size: 13px;">Titular / Asistente: <b style="color: #ffffff; font-size: 14px;">${t.attendeeName}</b></p>
-          <p style="margin: 6px 0; color: #8a9ab5; font-size: 13px;">Evento: <b style="color: #ffffff;">${t.eventName}</b></p>
-          <p style="margin: 6px 0; color: #8a9ab5; font-size: 13px;">Fecha: <b style="color: #ffffff;">${t.date}</b></p>
-          <p style="margin: 6px 0; color: #8a9ab5; font-size: 13px;">Lugar: <b style="color: #ffffff;">${t.venue}</b></p>
-          <div style="text-align: center; margin-top: 15px; padding: 14px; background: #ffffff; border-radius: 8px; display: inline-block;">
-            ${qrImageSrc ? `<img src="${qrImageSrc}" alt="Código QR Entrada ${t.ticketNumber}" width="180" height="180" style="display: block; margin: 0 auto; width: 180px; height: 180px;" />` : '<p style="color:#000;">Código QR listo</p>'}
-            <small style="color: #1a2d47; font-family: monospace; display: block; margin-top: 6px; font-weight: bold;">${t.qrToken.slice(0, 18)}...</small>
-          </div>
-        </div>
+        <!-- TICKET CARD PASS #${idx + 1} -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 24px; background-color: #0f1c2e; border: 1px solid #1e3552; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.3);">
+          <!-- Encabezado de la entrada -->
+          <tr>
+            <td style="background-color: ${badgeBg}; padding: 12px 18px; border-bottom: 2px solid ${accentBorderColor};">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="left">
+                    <span style="color: ${badgeTextColor}; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      ${badgeLabel}
+                    </span>
+                    <span style="display: block; color: rgba(255,255,255,0.85); font-size: 11px; margin-top: 2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      ${badgeSub}
+                    </span>
+                  </td>
+                  <td align="right" style="vertical-align: middle;">
+                    <span style="background-color: rgba(0,0,0,0.25); color: #ffffff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; font-family: monospace;">
+                      #${String(idx + 1).padStart(2, '0')}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Cuerpo de datos del asistente -->
+          <tr>
+            <td style="padding: 18px 20px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-bottom: 8px;">
+                    <span style="color: #8a9ab5; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      Asistente
+                    </span>
+                    <strong style="color: #ffffff; font-size: 16px; line-height: 1.3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: block; margin-top: 2px;">
+                      ${t.attendeeName}
+                    </strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom: 6px;">
+                    <span style="color: #8a9ab5; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      📅 <b>Fecha:</b> <span style="color: #e2e8f0;">${t.date || EVENT_DATE_FORMATTED}</span>
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom: 12px;">
+                    <span style="color: #8a9ab5; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      📍 <b>Lugar:</b> <span style="color: #e2e8f0;">${t.venue || EVENT_VENUE_FORMATTED}</span>
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Línea punteada de corte / perforación -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 6px 0 16px;">
+                <tr>
+                  <td style="border-top: 2px dashed #223854; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <!-- Contenedor del código QR -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center">
+                    <div style="background-color: #ffffff; border-radius: 12px; padding: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.4); text-align: center;">
+                      ${qrImageSrc ? `<img src="${qrImageSrc}" alt="Código QR Entrada ${t.ticketNumber}" width="180" height="180" style="display: block; margin: 0 auto; width: 180px; height: 180px; border: 0;" />` : '<p style="color:#0f172a; margin: 20px; font-family: sans-serif;">Código QR listo</p>'}
+                      <div style="margin-top: 8px; color: #0f172a; font-family: monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">
+                        TOKEN: ${t.qrToken.slice(0, 16)}...
+                      </div>
+                    </div>
+                    <span style="display: block; color: #64748b; font-size: 11px; margin-top: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      Mostrá este código desde la pantalla de tu celular en la entrada
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
       `
     }).join('')
 
+    const orderIdClean = confirmation.orderId.replace(/^#/, '')
+
     const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-      <head><meta charset="utf-8"></head>
-      <body style="background: #070e1a; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 25px; margin: 0;">
-        <div style="max-width: 600px; margin: 0 auto; background: #0b1726; border: 1px solid #1a2d47; border-radius: 12px; padding: 30px;">
-          <div style="text-align: center; margin-bottom: 25px;">
-            <h1 style="color: #d92736; margin: 0; font-size: 24px; letter-spacing: 1px; font-weight: 800;">ANDES TALLERES SPORT CLUB</h1>
-            <p style="color: #8a9ab5; margin: 6px 0 0; font-size: 13px;">Gran Fiesta y Cierre de Año 2026 · Andes Talleres Básquet Femenino</p>
-          </div>
-          <h2 style="color: #ffffff; font-size: 19px; border-bottom: 1px solid #1a2d47; padding-bottom: 12px; margin-top: 0;">¡Hola, ${confirmation.buyer.fullName}!</h2>
-          <div style="background: rgba(0, 210, 180, 0.15); border: 1px solid #00d2b4; border-radius: 8px; padding: 12px 16px; margin: 16px 0;">
-            <span style="font-size: 14px; color: #ffffff;">🏀 <b>Evento:</b> <span style="color: #00d2b4; font-weight: 700;">Cena Andes Talleres Básquet Femenino 2026</span></span>
-          </div>
-          <p style="color: #c2cad7; line-height: 1.6; font-size: 14px;">
-            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino en el <b>Camping del Club Andes Talleres</b>.
-            Presentá los siguientes códigos QR en el ingreso del evento desde tu teléfono celular o impresos.
-          </p>
-          ${ticketsHtml}
-          <div style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.35); border-radius: 8px; padding: 14px 18px; margin: 20px 0; text-align: left;">
-            <p style="margin: 0; color: #fbbf24; font-size: 13px; font-weight: bold;">
-              ⚠️ ¿Este correo te llegó a la carpeta de Spam o Correo no deseado?
-            </p>
-            <p style="margin: 6px 0 0; color: #c2cad7; font-size: 12px; line-height: 1.5;">
-              Por favor, marcá este correo como <b>"No es spam"</b> o movelo a tu <b>Bandeja Principal</b>. De esta forma vas a poder acceder rápidamente a tus códigos QR el día del evento en la puerta de ingreso y no te perderás ninguna novedad importante.
-            </p>
-          </div>
-          <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #1a2d47; text-align: center; color: #586a85; font-size: 12px;">
-            <p style="margin: 4px 0;">© 2026 Andes Talleres Sport Club · Subcomisión de Básquet Femenino</p>
-            <p style="margin: 4px 0;">Este correo fue despachado automáticamente tras la confirmación de tu pago.</p>
-          </div>
-        </div>
-      </body>
-      </html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="supported-color-schemes" content="light dark" />
+  <title>Tus Entradas - Andes Talleres Básquet Femenino</title>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td, p, a, strong { font-family: Arial, sans-serif !important; }
+  </style>
+  <![endif]-->
+  <style type="text/css">
+    :root {
+      color-scheme: light dark;
+      supported-color-schemes: light dark;
+    }
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      -webkit-text-size-adjust: 100% !important;
+      -ms-text-size-adjust: 100% !important;
+    }
+    img {
+      border: 0 !important;
+      outline: none !important;
+      text-decoration: none !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      .bg-outer { background-color: #040810 !important; }
+      .bg-inner { background-color: #0a1320 !important; border-color: #1a2a40 !important; }
+    }
+    @media screen and (max-width: 600px) {
+      .responsive-table { width: 100% !important; }
+      .mobile-padding { padding: 18px 14px !important; }
+      .mobile-title { font-size: 20px !important; }
+    }
+  </style>
+</head>
+<body class="bg-outer" style="margin: 0; padding: 0; background-color: #070e1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="bg-outer" style="background-color: #070e1a; width: 100%; margin: 0; padding: 20px 0;">
+    <tr>
+      <td align="center" style="padding: 10px;">
+        <!-- TABLA CONTENEDORA PRINCIPAL (MAX 600px) -->
+        <table role="presentation" class="responsive-table bg-inner" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%; background-color: #0b1726; border: 1px solid #1a2d47; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          
+          <!-- BANNER DE ENCABEZADO CLUB MATADOR -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #070e1a 0%, #0d1e33 60%, #8b121e 100%); background-color: #0d1e33; padding: 28px 24px 22px; text-align: center; border-bottom: 3px solid #d92736;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center">
+                    <!-- Badge del club -->
+                    <span style="display: inline-block; background-color: rgba(217, 39, 54, 0.2); border: 1px solid rgba(217, 39, 54, 0.5); color: #ff6874; font-size: 11px; font-weight: 800; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                      🏀 BÁSQUET FEMENINO · CIERRE 2026
+                    </span>
+                    <h1 class="mobile-title" style="margin: 6px 0 2px; color: #ffffff; font-size: 24px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                      ANDES TALLERES <span style="color: #d92736;">SPORT CLUB</span>
+                    </h1>
+                    <p style="margin: 0; color: #8a9ab5; font-size: 13px; font-weight: 500;">
+                      Cena de Fin de Año y Premiación
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- CUERPO PRINCIPAL DEL EMAIL -->
+          <tr>
+            <td class="mobile-padding" style="padding: 28px 26px;">
+              <!-- Saludo y Confirmación -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-bottom: 16px;">
+                    <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 700;">
+                      ¡Hola, ${confirmation.buyer.fullName}! 👋
+                    </h2>
+                    <p style="margin: 6px 0 0; color: #c2cad7; font-size: 14px; line-height: 1.5;">
+                      Tu pedido está <b>confirmado</b>. Acá tenés tus entradas y códigos QR oficiales para el ingreso al evento:
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- TARJETA RESUMEN DE LA ORDEN -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #0f1c2e; border: 1px solid #1c324e; border-radius: 10px; margin-bottom: 24px; overflow: hidden;">
+                <tr>
+                  <td style="padding: 16px 18px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="left">
+                          <span style="color: #8a9ab5; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">PEDIDO</span>
+                          <div style="color: #ff6874; font-size: 15px; font-weight: 800; font-family: monospace; margin-top: 1px;">#${orderIdClean}</div>
+                        </td>
+                        <td align="right">
+                          <span style="color: #8a9ab5; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">TOTAL</span>
+                          <div style="color: #10b981; font-size: 15px; font-weight: 800; margin-top: 1px;">$ ${confirmation.totalArs.toLocaleString('es-AR')}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding-top: 12px; border-top: 1px solid #1a2d47; margin-top: 8px;">
+                          <div style="font-size: 12px; color: #c2cad7; line-height: 1.5;">
+                            📍 <b>Lugar:</b> Camping del Club Andes Talleres<br />
+                            📅 <b>Fecha:</b> Lunes 14 de Diciembre de 2026 · 20:00 hs<br />
+                            🎟️ <b>Cantidad de entradas:</b> ${confirmation.quantity}
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- ENTRADAS INDIVIDUALES CON QR -->
+              ${ticketsHtml}
+
+              <!-- AVISO DE ACCESO Y PUERTA -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; margin-bottom: 20px;">
+                <tr>
+                  <td style="padding: 14px 16px;">
+                    <div style="color: #38bdf8; font-size: 13px; font-weight: 700; margin-bottom: 4px;">
+                      📲 ¿Cómo ingresar el día de la cena?
+                    </div>
+                    <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5;">
+                      En la puerta de acceso al camping, abrí este correo desde tu celular o guardá las imágenes de los códigos QR. El personal de recepción escaneará tu código para darte el ingreso al predio.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- AVISO DE SPAM / BANDEJA PRINCIPAL -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 10px; margin-bottom: 10px;">
+                <tr>
+                  <td style="padding: 14px 16px;">
+                    <div style="color: #fbbf24; font-size: 13px; font-weight: 700; margin-bottom: 4px;">
+                      ⭐ Consejo para no perder tus entradas
+                    </div>
+                    <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5;">
+                      Si este correo te llegó a <i>Promociones</i> o <i>Spam</i>, marcalo como <b>"Importante"</b> o movelo a la <b>Bandeja Principal</b> para tenerlo siempre a mano cuando llegues al club.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- PIE DE PÁGINA -->
+          <tr>
+            <td style="background-color: #070e1a; padding: 22px 24px; text-align: center; border-top: 1px solid #1a2d47;">
+              <p style="margin: 0; color: #94a3b8; font-size: 12px; font-weight: 600;">
+                Andes Talleres Sport Club · Subcomisión de Básquet Femenino
+              </p>
+              <p style="margin: 4px 0 0; color: #586a85; font-size: 11px;">
+                Cena de Fin de Año 2026 · Camping del Club Andes Talleres
+              </p>
+              <p style="margin: 8px 0 0; color: #475569; font-size: 11px;">
+                Este correo fue enviado de forma automática tras registrarse tu orden. Si tenés dudas, contactanos al WhatsApp oficial del evento.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
     `
 
     // Enviar solicitud a la ruta serverless de Node
@@ -115,7 +331,7 @@ export async function sendTicketsEmail(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: confirmation.buyer.email,
-        subject: `Tus Entradas QR - Cena Básquet Femenino ATSC (#${confirmation.orderId.slice(0, 8)})`,
+        subject: `🏀 Tus Entradas QR - Cena Básquet Femenino ATSC (#${orderIdClean.slice(0, 8)})`,
         html: htmlContent,
         attachments,
       }),
@@ -128,7 +344,6 @@ export async function sendTicketsEmail(
         (response.status === 500
           ? 'Error 500 en Vercel al despachar el correo. Verificá que las variables SMTP (SMTP_USER, SMTP_PASS) estén configuradas en Vercel y hacé un Redeploy.'
           : `Error en el servidor al despachar correo (Status ${response.status})`)
-      // Loguear error sin credenciales
       console.error('[SMTP Client Error]:', errorMsg)
       return {
         success: false,
@@ -152,7 +367,6 @@ export async function sendTicketsEmail(
       }
     }
   } catch (err: any) {
-    // Si el mail falla, que no rompa la compra; loguear el error sin credenciales
     const safeError = err?.message || 'Error de conexión con el servicio de correo'
     console.error('[SMTP Client Exception]:', safeError)
     return {
