@@ -638,7 +638,41 @@ function App() {
   // Generar URL de WhatsApp con mensaje prearmado
   const getWhatsAppUrl = () => {
     if (!orderConfirmation) return '#'
-    const msg = `¡Hola! Te envío el comprobante de transferencia para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino (${EVENT_DATE} en ${EVENT_VENUE}).\n\n*Evento:* Cierre Básquet Femenino\n*Pedido:* #${orderConfirmation.orderId}\n*Titular:* ${orderConfirmation.buyer.fullName}\n*DNI:* ${orderConfirmation.buyer.dni}\n*Categoría:* ${primaryCategory}\n*Entradas:* ${orderConfirmation.quantity}\n*Total:* ${money(orderConfirmation.totalArs)}\n*Email:* ${orderConfirmation.buyer.email}`
+
+    // Emoji por rol
+    const roleEmoji = (role?: string) => {
+      if (role === 'jugador') return '🏀'
+      if (role === 'menor') return '👶'
+      return '🎟️'
+    }
+
+    // Label por rol
+    const roleLabel = (role?: string) => {
+      if (role === 'jugador') return 'Jugadora/Profe'
+      if (role === 'menor') return 'Menor <3'
+      return 'Acompañante'
+    }
+
+    // Construir lista de entradas
+    const ticketLines = orderConfirmation.tickets
+      .map((t, i) => `  ${i + 1}. ${roleEmoji(t.role)} ${roleLabel(t.role)}: ${t.attendeeName}`)
+      .join('\n')
+
+    const msg = [
+      `¡Hola! Te envío el comprobante de transferencia para la Cena de Fin de Año de Andes Talleres Básquet Femenino (${EVENT_DATE} en ${EVENT_VENUE}).`,
+      '',
+      `*Pedido:* #${orderConfirmation.orderId}`,
+      `*Titular:* ${orderConfirmation.buyer.fullName}`,
+      `*DNI:* ${orderConfirmation.buyer.dni}`,
+      `*Categoría:* ${primaryCategory}`,
+      `*Total:* ${money(orderConfirmation.totalArs)}`,
+      '',
+      `*Entradas (${orderConfirmation.quantity}):*`,
+      ticketLines,
+      '',
+      `*Email:* ${orderConfirmation.buyer.email}`,
+    ].join('\n')
+
     return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`
   }
 
