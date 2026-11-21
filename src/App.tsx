@@ -639,11 +639,11 @@ function App() {
   const getWhatsAppUrl = () => {
     if (!orderConfirmation) return '#'
 
-    // Emoji por rol
+    // Emoji por rol (Unicode escapes para compatibilidad con WhatsApp URL)
     const roleEmoji = (role?: string) => {
-      if (role === 'jugador') return '🏀'
-      if (role === 'menor') return '👶'
-      return '🎟️'
+      if (role === 'jugador') return '\u26BD'  // ⚽
+      if (role === 'menor') return '\uD83D\uDC76'  // 👶
+      return '\uD83C\uDFAB'  // 🎫
     }
 
     // Label por rol
