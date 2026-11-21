@@ -718,10 +718,6 @@ function App() {
                 <span className="fiesta-year">2026</span>
               </h1>
 
-              <p className="fiesta-subtitle">
-                Premiación, reconocimientos a jugadoras y cuerpo técnico, cena comunitaria y gran sorteo de fin de año
-              </p>
-
               <div className="fiesta-quick-info">
                 <div className="info-item">
                   <Calendar size={16} />
@@ -829,7 +825,7 @@ function App() {
                   {/* BLOQUE A: JUGADORAS Y PROFESORAS DEL CLUB (GRATIS $0) */}
                   <div className="ticket-counter-box" style={{ background: 'rgba(0, 210, 180, 0.05)', border: '1px solid rgba(0, 210, 180, 0.3)', borderRadius: '8px', padding: '16px' }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
                         <strong style={{ color: '#00d2b4', fontSize: '15px' }}>🏀 Jugadoras y Profes del Club</strong>
                         <span style={{ background: 'rgba(0, 210, 180, 0.2)', color: '#00d2b4', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>
                           ¡ENTRADA BONIFICADA ($0)!
@@ -981,7 +977,7 @@ function App() {
                   {/* BLOQUE B: ACOMPAÑANTES MAYORES (PAGAN ENTRADA) */}
                   <div className="ticket-counter-box" style={{ background: 'rgba(14, 26, 43, 0.5)', border: '1px solid var(--navy-card-border)', borderRadius: '8px', padding: '16px' }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
                         <strong style={{ color: '#ffffff', fontSize: '15px' }}>🎟️ Acompañantes / Familiares</strong>
                         <span className="price-big" style={{ fontSize: '20px' }}>{money(unitPrice)} <small style={{ fontSize: '12px', fontWeight: 'normal', color: '#8a9ab5' }}>c/u</small></span>
                       </div>
@@ -1017,7 +1013,7 @@ function App() {
                   {/* BLOQUE C: MENORES DE 3 AÑOS (GRATIS $0) */}
                   <div className="ticket-counter-box" style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '8px', padding: '16px' }}>
                     <div className="counter-info">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '2px' }}>
                         <strong style={{ color: '#38bdf8', fontSize: '15px' }}>👶 Menores de 3 años</strong>
                         <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>
                           ¡NO PAGAN ENTRADA! ($0)
