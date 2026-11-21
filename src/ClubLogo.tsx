@@ -12,7 +12,7 @@ export function ClubLogo({
   className = ''
 }: ClubLogoProps) {
   const [imgError, setImgError] = useState(false)
-  const resolvedUrl = url || (import.meta.env.VITE_CLUB_LOGO_URL as string) || null
+  const resolvedUrl = url || (import.meta.env.VITE_CLUB_LOGO_URL as string) || '/logo.png'
 
   if (resolvedUrl && !imgError) {
     return (
