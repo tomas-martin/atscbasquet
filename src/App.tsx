@@ -834,11 +834,8 @@ function App() {
                         </span>
                       </div>
                       <span style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '3px', display: 'block' }}>
-                        Chicas, jugadoras de todas las categorías (Escuela formativa hasta Primera y Maxi básquet) y cuerpo técnico. Entrada 100% bonificada sin costo por el club.
+                        Jugadoras de todas las categorías y cuerpo técnico. Entrada bonificada por el club.
                       </span>
-                      <small style={{ color: '#8a9ab5', display: 'block', marginTop: '3px', fontSize: '11px' }}>
-                        * Acceso bonificado al evento (no participan del sorteo de premios).
-                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -984,11 +981,8 @@ function App() {
                         <span className="price-big" style={{ fontSize: '18px', color: '#ff6874' }}>{money(unitPrice)} <small style={{ fontSize: '12px', color: '#8a9ab5', fontWeight: 'normal' }}>c/u</small></span>
                       </div>
                       <span style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '3px', display: 'block' }}>
-                        Papás, mamás, familiares y amigos mayores de 3 años.
+                        Familiares y amigos. Incluye número oficial para el sorteo.
                       </span>
-                      <small style={{ color: '#fbbf24', display: 'block', marginTop: '3px', fontSize: '11.5px', fontWeight: 600 }}>
-                        🎟️ Cada acompañante recibe su número oficial para el sorteo de premios.
-                      </small>
                     </div>
 
                     <div className="stepper-modern">
@@ -1022,11 +1016,8 @@ function App() {
                         </span>
                       </div>
                       <span style={{ fontSize: '12.5px', color: '#c2cad7', marginTop: '3px', display: 'block' }}>
-                        Niños y niñas menores de 3 años cumplidos en el grupo familiar.
+                        Niños y niñas menores de 3 años cumplidos en la familia.
                       </span>
-                      <small style={{ color: '#8a9ab5', display: 'block', marginTop: '3px', fontSize: '11px' }}>
-                        * Ingreso bonificado sin costo (no participan del sorteo de premios).
-                      </small>
                     </div>
 
                     <div className="stepper-modern">
