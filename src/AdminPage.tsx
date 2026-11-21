@@ -126,8 +126,6 @@ export default function AdminPage({
   const [tickets, setTickets] = useState<TicketRow[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [filterDinner, setFilterDinner] = useState<'all' | 'masculino' | 'femenino'>('all')
-  const [raffleDinnerFilter, setRaffleDinnerFilter] = useState<'all' | 'masculino' | 'femenino'>('all')
   const [approvingOrderId, setApprovingOrderId] = useState<string | null>(null)
   const [actionFeedback, setActionFeedback] = useState<{ message: string; success: boolean } | null>(null)
 
@@ -683,16 +681,9 @@ export default function AdminPage({
         }
       }
 
-      // 5. Filtro por Rama / Cena (Masculino vs Femenino)
-      if (raffleDinnerFilter !== 'all') {
-        const branch = p.ticket.dinner_branch || p.order?.dinner_branch || (p.order?.transfer_reference?.toLowerCase().includes('femenin') ? 'femenino' : 'masculino')
-        if (raffleDinnerFilter === 'femenino' && branch !== 'femenino') return false
-        if (raffleDinnerFilter === 'masculino' && branch === 'femenino') return false
-      }
-
       return true
     })
-  }, [raffleParticipants, raffleFilter, excludePreviousWinners, winnersHistory, raffleRoleFilter, raffleCategoryFilter, raffleDinnerFilter])
+  }, [raffleParticipants, raffleFilter, excludePreviousWinners, winnersHistory, raffleRoleFilter, raffleCategoryFilter])
 
   // Audio Web API para efectos de sonido
   function playTickSound() {
@@ -1779,11 +1770,6 @@ export default function AdminPage({
     if (!matchesSearch) return false
     if (filterStatus === 'pagado') return o.status === 'pagado'
     if (filterStatus === 'pendiente') return o.status === 'pendiente'
-    if (filterDinner !== 'all') {
-      const isFem = o.dinner_branch === 'femenino' || o.transfer_reference?.toLowerCase().includes('femenin')
-      if (filterDinner === 'femenino' && !isFem) return false
-      if (filterDinner === 'masculino' && isFem) return false
-    }
     return true
   })
 
@@ -2019,9 +2005,9 @@ export default function AdminPage({
                     {scanResult.dinnerBranch && (
                       <div style={{ margin: '6px 0 10px' }}>
                         <span style={{
-                          background: scanResult.dinnerBranch === 'femenino' ? 'rgba(0, 210, 180, 0.22)' : 'rgba(30, 86, 153, 0.35)',
-                          color: scanResult.dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa',
-                          border: `1px solid ${scanResult.dinnerBranch === 'femenino' ? 'rgba(0, 210, 180, 0.5)' : 'rgba(30, 86, 153, 0.5)'}`,
+                          background: 'rgba(0, 210, 180, 0.22)',
+                          color: '#00d2b4',
+                          border: '1px solid rgba(0, 210, 180, 0.5)',
                           fontSize: '11px',
                           fontWeight: 800,
                           padding: '3px 10px',
@@ -2030,7 +2016,7 @@ export default function AdminPage({
                           textTransform: 'uppercase',
                           display: 'inline-block'
                         }}>
-                          🏀 {scanResult.dinnerBranch === 'femenino' ? 'CENA BÁSQUET FEMENINO' : 'CENA BÁSQUET MASCULINO'}
+                          🏀 CENA BÁSQUET FEMENINO
                         </span>
                       </div>
                     )}
@@ -2606,28 +2592,10 @@ export default function AdminPage({
                 Pendientes
               </button>
 
-              <div style={{ display: 'inline-flex', gap: '6px', marginLeft: '12px', borderLeft: '1px solid rgba(255,255,255,0.12)', paddingLeft: '12px' }}>
-                <button
-                  className={filterDinner === 'all' ? 'active' : ''}
-                  onClick={() => setFilterDinner('all')}
-                  style={{ fontSize: '11.5px', padding: '4px 10px' }}
-                >
-                  Todas las Cenas
-                </button>
-                <button
-                  className={filterDinner === 'masculino' ? 'active' : ''}
-                  onClick={() => setFilterDinner('masculino')}
-                  style={{ fontSize: '11.5px', padding: '4px 10px', color: filterDinner === 'masculino' ? '#fff' : '#60a5fa' }}
-                >
-                  🏀 Masculino
-                </button>
-                <button
-                  className={filterDinner === 'femenino' ? 'active' : ''}
-                  onClick={() => setFilterDinner('femenino')}
-                  style={{ fontSize: '11.5px', padding: '4px 10px', color: filterDinner === 'femenino' ? '#fff' : '#00d2b4' }}
-                >
-                  🏀 Femenino
-                </button>
+              <div style={{ display: 'inline-flex', alignItems: 'center', marginLeft: '12px', borderLeft: '1px solid rgba(255,255,255,0.12)', paddingLeft: '12px' }}>
+                <span style={{ fontSize: '11.5px', padding: '4px 10px', borderRadius: '6px', background: 'rgba(0, 210, 180, 0.12)', color: '#00d2b4', border: '1px solid rgba(0, 210, 180, 0.3)', fontWeight: 700 }}>
+                  🏀 Básquet Femenino
+                </span>
               </div>
             </div>
           </div>
@@ -2666,15 +2634,9 @@ export default function AdminPage({
                       </span>
                     </td>
                     <td>
-                      {(order.dinner_branch === 'femenino' || order.transfer_reference?.toLowerCase().includes('femenin')) ? (
-                        <span style={{ background: 'rgba(0, 210, 180, 0.15)', color: '#00d2b4', border: '1px solid rgba(0, 210, 180, 0.35)', fontSize: '10.5px', fontWeight: 800, padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
-                          🏀 Femenino
-                        </span>
-                      ) : (
-                        <span style={{ background: 'rgba(30, 86, 153, 0.25)', color: '#60a5fa', border: '1px solid rgba(30, 86, 153, 0.4)', fontSize: '10.5px', fontWeight: 800, padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
-                          🏀 Masculino
-                        </span>
-                      )}
+                      <span style={{ background: 'rgba(0, 210, 180, 0.15)', color: '#00d2b4', border: '1px solid rgba(0, 210, 180, 0.35)', fontSize: '10.5px', fontWeight: 800, padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                        🏀 Femenino
+                      </span>
                     </td>
                     <td>{new Date(order.created_at).toLocaleDateString('es-AR')}</td>
                     <td><strong>{order.buyer_full_name}</strong></td>
@@ -2866,38 +2828,15 @@ export default function AdminPage({
                   </div>
                 </div>
 
-                {/* 3. Selector de Cena / Rama a Sortear */}
+                {/* 3. Evento a Sortear */}
                 <div className="sorteo-filter-group">
                   <label className="sorteo-group-label">
-                    🏀 Cena a Sortear:
+                    🏀 Evento:
                   </label>
                   <div className="sorteo-role-pills">
-                    <button
-                      type="button"
-                      className={`sorteo-role-pill ${raffleDinnerFilter === 'all' ? 'active' : ''}`}
-                      onClick={() => setRaffleDinnerFilter('all')}
-                      disabled={isRolling}
-                    >
-                      Todas las Cenas
-                    </button>
-                    <button
-                      type="button"
-                      className={`sorteo-role-pill ${raffleDinnerFilter === 'masculino' ? 'active' : ''}`}
-                      onClick={() => setRaffleDinnerFilter('masculino')}
-                      disabled={isRolling}
-                      style={{ color: raffleDinnerFilter === 'masculino' ? '#fff' : '#60a5fa' }}
-                    >
-                      🏀 Masculino
-                    </button>
-                    <button
-                      type="button"
-                      className={`sorteo-role-pill ${raffleDinnerFilter === 'femenino' ? 'active' : ''}`}
-                      onClick={() => setRaffleDinnerFilter('femenino')}
-                      disabled={isRolling}
-                      style={{ color: raffleDinnerFilter === 'femenino' ? '#fff' : '#00d2b4' }}
-                    >
-                      🏀 Femenino
-                    </button>
+                    <span style={{ background: 'rgba(0, 210, 180, 0.15)', color: '#00d2b4', border: '1px solid rgba(0, 210, 180, 0.35)', fontSize: '11px', fontWeight: 800, padding: '5px 12px', borderRadius: '20px' }}>
+                      🏀 Básquet Femenino 2026
+                    </span>
                   </div>
                 </div>
               </div>

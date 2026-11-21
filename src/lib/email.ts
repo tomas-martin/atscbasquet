@@ -81,14 +81,14 @@ export async function sendTicketsEmail(
         <div style="max-width: 600px; margin: 0 auto; background: #0b1726; border: 1px solid #1a2d47; border-radius: 12px; padding: 30px;">
           <div style="text-align: center; margin-bottom: 25px;">
             <h1 style="color: #d92736; margin: 0; font-size: 24px; letter-spacing: 1px; font-weight: 800;">ANDES TALLERES SPORT CLUB</h1>
-            <p style="color: #8a9ab5; margin: 6px 0 0; font-size: 13px;">Gran Fiesta y Cierre de Año 2026 · Andes Talleres Básquet</p>
+            <p style="color: #8a9ab5; margin: 6px 0 0; font-size: 13px;">Gran Fiesta y Cierre de Año 2026 · Andes Talleres Básquet Femenino</p>
           </div>
           <h2 style="color: #ffffff; font-size: 19px; border-bottom: 1px solid #1a2d47; padding-bottom: 12px; margin-top: 0;">¡Hola, ${confirmation.buyer.fullName}!</h2>
-          <div style="background: rgba(30, 86, 153, 0.2); border: 1px solid #1e5699; border-radius: 8px; padding: 12px 16px; margin: 16px 0;">
-            <span style="font-size: 14px; color: #ffffff;">🏀 <b>Cena Seleccionada:</b> <span style="color: ${confirmation.dinnerBranch === 'femenino' ? '#00d2b4' : '#60a5fa'}; font-weight: 700;">${confirmation.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'}</span></span>
+          <div style="background: rgba(0, 210, 180, 0.15); border: 1px solid #00d2b4; border-radius: 8px; padding: 12px 16px; margin: 16px 0;">
+            <span style="font-size: 14px; color: #ffffff;">🏀 <b>Evento:</b> <span style="color: #00d2b4; font-weight: 700;">Cena Andes Talleres Básquet Femenino 2026</span></span>
           </div>
           <p style="color: #c2cad7; line-height: 1.6; font-size: 14px;">
-            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet (${confirmation.dinnerBranch === 'femenino' ? 'Rama Femenina' : 'Rama Masculina'}) el <b>Viernes 18 de Diciembre (18/12 · 21:00 hs)</b> en el <b>Estadio Salvador Bonanno - Andes Talleres</b>.
+            Confirmamos tu compra de <b>${confirmation.quantity} entrada(s)</b> para la Gran Fiesta y Cierre de Año de Andes Talleres Básquet Femenino en el <b>Estadio Salvador Bonanno - Andes Talleres</b>.
             Presentá los siguientes códigos QR en el ingreso del evento desde tu teléfono celular o impresos.
           </p>
           ${ticketsHtml}
@@ -101,7 +101,7 @@ export async function sendTicketsEmail(
             </p>
           </div>
           <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #1a2d47; text-align: center; color: #586a85; font-size: 12px;">
-            <p style="margin: 4px 0;">© 2026 Andes Talleres Sport Club · Subcomisión de Básquet</p>
+            <p style="margin: 4px 0;">© 2026 Andes Talleres Sport Club · Subcomisión de Básquet Femenino</p>
             <p style="margin: 4px 0;">Este correo fue despachado automáticamente tras la confirmación de tu pago.</p>
           </div>
         </div>
@@ -115,7 +115,7 @@ export async function sendTicketsEmail(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: confirmation.buyer.email,
-        subject: `Tus Entradas QR - ${confirmation.dinnerBranch === 'femenino' ? 'Cena Básquet Femenino' : 'Cena Básquet Masculino'} ATSC (#${confirmation.orderId.slice(0, 8)})`,
+        subject: `Tus Entradas QR - Cena Básquet Femenino ATSC (#${confirmation.orderId.slice(0, 8)})`,
         html: htmlContent,
         attachments,
       }),

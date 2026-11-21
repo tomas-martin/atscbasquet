@@ -5,7 +5,7 @@ export type OrderStatus = 'pendiente' | 'pagado' | 'rechazado' | 'cancelado'
 
 export type AttendeeRole = 'jugador' | 'acompanante' | 'menor'
 
-export type DinnerBranch = 'masculino' | 'femenino'
+export type DinnerBranch = 'femenino'
 
 export const DINNER_BRANCH_CONFIG: Record<DinnerBranch, {
   title: string
@@ -16,15 +16,6 @@ export const DINNER_BRANCH_CONFIG: Record<DinnerBranch, {
   badgeColor: string
   categoriesDesc: string
 }> = {
-  masculino: {
-    title: 'Cena Básquet Masculino',
-    subtitle: 'Mosquitos a U21, Primera División Masculina y Maxibásquet',
-    defaultDate: 'Viernes 18 de Diciembre de 2026 (18/12) · 21:00 hs',
-    shortDate: 'Viernes 18/12 · 21:00 hs',
-    tag: 'Rama Masculina',
-    badgeColor: '#1e5699',
-    categoriesDesc: 'Mosquitos, Premini, Mini, U13 a U21, Primera y Maxi'
-  },
   femenino: {
     title: 'Cena Básquet Femenino',
     subtitle: 'Formativa Femenina y Primera División Femenina',
@@ -44,10 +35,7 @@ export const CATEGORIES = [
   'U15',
   'U17',
   'U19',
-  'U21',
-  'Primera Masculino',
-  'Primera Femenino',
-  'Formativas Femenino',
+  'Primera División',
   'Maxibásquet',
   'Cuerpo Técnico / Dirigente'
 ] as const
